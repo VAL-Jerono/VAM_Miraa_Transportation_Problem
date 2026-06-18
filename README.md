@@ -189,9 +189,7 @@ This project is developed for academic purposes as part of the Masters in Data S
 - Data Science Team, Strathmore University
 - Group Report Authors (DSA 8302 Practical Exercise 2)
 
-## Support
 
-For questions or support, contact: +254 700 123 456
 
 ---
 

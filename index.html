@@ -2,25 +2,32 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MiraaTrans - Meru to Market</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>MiraaTrans — Meru to Market</title>
+<meta name="description" content="Place a miraa transport order, track your shipment, and check delivery costs to any market.">
+<meta name="theme-color" content="#1B4332">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* ── TOKENS ────────────────────────────────────────────── */
 :root {
-  --green-deep:   #1B4332;
-  --green-mid:    #2D6A4F;
-  --green-bright: #52B788;
-  --parchment:    #F8F3E6;
-  --parchment-dark: #EDE8D5;
-  --gold:         #D4A017;
-  --ink:          #1A1A2E;
-  --muted:        #6B7280;
-  --red:          #E63946;
-  --white:        #FFFFFF;
-  --radius:       8px;
-  --shadow:       0 2px 12px rgba(27,67,50,0.10);
+  --green-deep:     #1B4332;
+  --green-mid:      #2D6A4F;
+  --green-bright:   #52B788;
+  --green-pale:     #E7F4ED;
+  --parchment:      #F8F3E6;
+  --parchment-dark: #EAE3CC;
+  --gold:           #C8911A;
+  --gold-pale:      #FBF1DD;
+  --ink:            #1A1A2E;
+  --muted:          #6B7280;
+  --red:            #C0392B;
+  --red-pale:       #FBEAE8;
+  --white:          #FFFFFF;
+  --radius:         10px;
+  --radius-sm:      6px;
+  --shadow:         0 2px 14px rgba(27,67,50,0.09);
+  --shadow-lift:    0 6px 24px rgba(27,67,50,0.16);
 }
 
 /* ── RESET ─────────────────────────────────────────────── */
@@ -31,10 +38,15 @@ body {
   background: var(--parchment);
   color: var(--ink);
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
 }
 button { font-family: inherit; cursor: pointer; border: none; }
 input, select, textarea { font-family: inherit; }
 a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 2.5px solid var(--green-bright); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
 
 /* ── HEADER ────────────────────────────────────────────── */
 header {
@@ -44,56 +56,88 @@ header {
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 .header-inner {
-  max-width: 900px;
+  max-width: 720px;
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 56px;
+  height: 58px;
 }
 .logo {
   font-family: 'Oswald', sans-serif;
-  font-size: 1.4rem;
+  font-size: 1.35rem;
   font-weight: 700;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
   display: flex;
   align-items: center;
   gap: 8px;
 }
-.logo-leaf { font-size: 1.2rem; }
+.logo-leaf { font-size: 1.15rem; }
 .tagline {
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   color: var(--green-bright);
-  letter-spacing: 1.5px;
+  letter-spacing: 1.2px;
   text-transform: uppercase;
   font-weight: 500;
+}
+.role-pill {
+  display: flex;
+  background: rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 3px;
+  gap: 2px;
+}
+.role-pill button {
+  background: none;
+  color: rgba(255,255,255,0.6);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 18px;
+  transition: background 0.15s, color 0.15s;
+}
+.role-pill button.active {
+  background: var(--green-bright);
+  color: var(--green-deep);
 }
 
 /* ── TABS ──────────────────────────────────────────────── */
 nav.tabs {
   background: var(--green-deep);
   border-top: 1px solid rgba(255,255,255,0.08);
+  position: sticky;
+  top: 58px;
+  z-index: 99;
 }
 .tabs-inner {
-  max-width: 900px;
+  max-width: 720px;
   margin: 0 auto;
   display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
 }
+.tabs-inner::-webkit-scrollbar { display: none; }
 .tab-btn {
   flex: 1;
-  padding: 12px 4px;
+  min-width: 86px;
+  padding: 12px 6px;
   background: none;
   color: rgba(255,255,255,0.55);
   font-family: 'Oswald', sans-serif;
-  font-size: 0.85rem;
-  letter-spacing: 0.8px;
+  font-size: 0.78rem;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
   border-bottom: 3px solid transparent;
   transition: color 0.2s, border-color 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
 }
+.tab-btn .tab-icon { font-size: 1rem; }
 .tab-btn:hover { color: rgba(255,255,255,0.85); }
 .tab-btn.active {
   color: var(--green-bright);
@@ -102,12 +146,13 @@ nav.tabs {
 
 /* ── MAIN CONTAINER ────────────────────────────────────── */
 main {
-  max-width: 900px;
+  max-width: 720px;
   margin: 0 auto;
-  padding: 24px 16px 60px;
+  padding: 22px 16px 60px;
 }
-.tab-panel { display: none; }
+.tab-panel { display: none; animation: fadeIn 0.25s ease; }
 .tab-panel.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
 /* ── SECTION LABEL ─────────────────────────────────────── */
 .section-label {
@@ -120,18 +165,18 @@ main {
 }
 .section-title {
   font-family: 'Oswald', sans-serif;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   font-weight: 700;
   color: var(--green-deep);
-  line-height: 1.1;
-  margin-bottom: 10px;
+  line-height: 1.15;
+  margin-bottom: 8px;
 }
 .section-sub {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: var(--muted);
   line-height: 1.6;
-  margin-bottom: 24px;
-  max-width: 600px;
+  margin-bottom: 22px;
+  max-width: 560px;
 }
 
 /* ── CARD ──────────────────────────────────────────────── */
@@ -153,279 +198,61 @@ main {
   gap: 8px;
 }
 
-/* ── OVERVIEW TAB ──────────────────────────────────────── */
-.hero-banner {
-  background: linear-gradient(135deg, var(--green-deep) 0%, var(--green-mid) 100%);
-  border-radius: var(--radius);
-  padding: 28px 24px;
-  color: var(--white);
-  margin-bottom: 20px;
-  position: relative;
-  overflow: hidden;
-}
-.hero-banner::after {
-  content: '';
-  position: absolute;
-  right: -20px; top: -20px;
-  width: 160px; height: 160px;
-  background: rgba(82,183,136,0.15);
-  border-radius: 50%;
-}
-.hero-eyebrow {
-  font-size: 0.7rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--green-bright);
-  font-weight: 600;
-  margin-bottom: 8px;
-}
-.hero-headline {
-  font-family: 'Oswald', sans-serif;
-  font-size: 2rem;
-  font-weight: 700;
-  line-height: 1.1;
-  margin-bottom: 10px;
-}
-.hero-body {
-  font-size: 0.88rem;
-  color: rgba(255,255,255,0.8);
-  line-height: 1.7;
-  max-width: 520px;
-}
-.stats-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-bottom: 20px;
-}
-.stat-box {
-  background: var(--white);
-  border-radius: var(--radius);
-  padding: 16px;
-  text-align: center;
-  box-shadow: var(--shadow);
-}
-.stat-number {
-  font-family: 'Oswald', sans-serif;
-  font-size: 1.7rem;
-  font-weight: 700;
-  color: var(--green-mid);
-}
-.stat-label {
-  font-size: 0.72rem;
-  color: var(--muted);
-  margin-top: 2px;
-  line-height: 1.3;
-}
-
-/* ── COST MATRIX TABLE ─────────────────────────────────── */
-.matrix-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.82rem;
-  overflow-x: auto;
-  display: block;
-}
-.matrix-table th {
-  background: var(--green-deep);
-  color: var(--white);
-  padding: 9px 12px;
-  text-align: center;
-  font-family: 'Oswald', sans-serif;
-  font-weight: 400;
-  letter-spacing: 0.5px;
-  font-size: 0.78rem;
-}
-.matrix-table th:first-child { text-align: left; }
-.matrix-table td {
-  padding: 9px 12px;
-  text-align: center;
-  border-bottom: 1px solid var(--parchment-dark);
-  font-variant-numeric: tabular-nums;
-}
-.matrix-table td:first-child {
-  text-align: left;
-  font-weight: 500;
-  background: var(--parchment);
-}
-.matrix-table tr:last-child td {
-  background: var(--parchment-dark);
-  font-weight: 600;
-  font-size: 0.8rem;
-  color: var(--green-deep);
-}
-.cell-optimal {
-  background: rgba(82,183,136,0.18) !important;
-  font-weight: 700;
-  color: var(--green-mid);
-}
-.cell-cost-high { color: var(--red); font-weight: 600; }
-.cell-cost-mid  { color: var(--gold); font-weight: 600; }
-.cell-cost-low  { color: var(--green-mid); font-weight: 700; }
-
-/* ── ROUTE CARDS ───────────────────────────────────────── */
-.routes-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-@media (max-width: 520px) { .routes-grid { grid-template-columns: 1fr; } }
-.route-card {
-  border-left: 4px solid var(--green-bright);
-  background: var(--white);
-  border-radius: 0 var(--radius) var(--radius) 0;
-  padding: 14px 16px;
-  box-shadow: var(--shadow);
-}
-.route-header {
-  font-family: 'Oswald', sans-serif;
-  font-size: 0.88rem;
-  font-weight: 600;
-  color: var(--green-deep);
-  margin-bottom: 6px;
-}
-.route-arrow { color: var(--green-bright); margin: 0 4px; }
-.route-detail {
-  font-size: 0.78rem;
-  color: var(--muted);
-  line-height: 1.5;
-}
-.route-cost {
-  margin-top: 6px;
-  font-family: 'Oswald', sans-serif;
-  font-size: 1.05rem;
-  color: var(--green-mid);
-  font-weight: 600;
-}
-
-/* ── TRACK TAB ─────────────────────────────────────────── */
-.track-search {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-.track-search input {
-  flex: 1;
-  padding: 11px 14px;
-  border: 1.5px solid var(--parchment-dark);
-  border-radius: var(--radius);
-  font-size: 0.9rem;
-  background: var(--white);
-  transition: border-color 0.2s;
-}
-.track-search input:focus {
-  outline: none;
-  border-color: var(--green-bright);
-}
+/* ── BUTTONS ───────────────────────────────────────────── */
 .btn-primary {
   background: var(--green-mid);
   color: var(--white);
-  padding: 11px 20px;
-  border-radius: var(--radius);
+  padding: 12px 22px;
+  border-radius: var(--radius-sm);
   font-family: 'Oswald', sans-serif;
   font-weight: 600;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.4px;
   font-size: 0.9rem;
-  transition: background 0.2s;
+  transition: background 0.2s, transform 0.1s;
 }
 .btn-primary:hover { background: var(--green-deep); }
+.btn-primary:active { transform: scale(0.98); }
+.btn-primary:disabled { opacity: 0.55; cursor: not-allowed; }
 .btn-ghost {
   background: none;
   border: 1.5px solid var(--green-mid);
   color: var(--green-mid);
-  padding: 10px 20px;
-  border-radius: var(--radius);
+  padding: 11px 20px;
+  border-radius: var(--radius-sm);
   font-family: 'Oswald', sans-serif;
   font-weight: 600;
   font-size: 0.9rem;
   transition: all 0.2s;
 }
 .btn-ghost:hover { background: var(--green-mid); color: var(--white); }
+.btn-block { width: 100%; }
 
-/* ── FRESHNESS CLOCK ───────────────────────────────────── */
-.shipment-card {
-  background: var(--white);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 20px;
+/* ── ROLE TOGGLE (within Ship tab) ───────────────────────── */
+.seg-toggle {
   display: flex;
-  gap: 20px;
-  align-items: flex-start;
-  margin-bottom: 14px;
+  background: var(--parchment-dark);
+  border-radius: var(--radius-sm);
+  padding: 4px;
+  margin-bottom: 20px;
+  gap: 4px;
 }
-@media (max-width: 500px) { .shipment-card { flex-direction: column; } }
-.freshness-clock {
-  flex-shrink: 0;
-  width: 80px;
-  height: 80px;
-  position: relative;
-}
-.freshness-clock svg { width: 80px; height: 80px; }
-.clock-label {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-}
-.clock-pct {
-  font-family: 'Oswald', sans-serif;
-  font-size: 1.1rem;
-  font-weight: 700;
-  line-height: 1;
-}
-.clock-sub {
-  font-size: 0.55rem;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-.shipment-info { flex: 1; }
-.shipment-id {
-  font-size: 0.7rem;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 2px;
-}
-.shipment-route {
-  font-family: 'Oswald', sans-serif;
-  font-size: 1.15rem;
+.seg-toggle button {
+  flex: 1;
+  background: none;
+  padding: 10px 8px;
+  border-radius: 5px;
+  font-size: 0.82rem;
   font-weight: 600;
+  color: var(--muted);
+  transition: all 0.15s;
+}
+.seg-toggle button.active {
+  background: var(--white);
   color: var(--green-deep);
-  margin-bottom: 6px;
-}
-.shipment-meta {
-  font-size: 0.78rem;
-  color: var(--muted);
-  line-height: 1.7;
-}
-.status-badge {
-  display: inline-block;
-  padding: 2px 10px;
-  border-radius: 20px;
-  font-size: 0.72rem;
-  font-weight: 600;
-  margin-top: 6px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-.status-transit  { background: rgba(82,183,136,0.15); color: var(--green-mid); }
-.status-urgent   { background: rgba(212,160,23,0.18); color: #9a6f00; }
-.status-overdue  { background: rgba(230,57,70,0.15); color: var(--red); }
-.status-arrived  { background: rgba(27,67,50,0.12); color: var(--green-deep); }
-
-.demo-shipments { margin-top: 4px; }
-.demo-note {
-  font-size: 0.78rem;
-  color: var(--muted);
-  background: var(--parchment);
-  border-radius: var(--radius);
-  padding: 10px 14px;
-  margin-bottom: 16px;
-  border-left: 3px solid var(--green-bright);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
 }
 
-/* ── REQUEST TAB ───────────────────────────────────────── */
+/* ── FORM ──────────────────────────────────────────────── */
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -439,31 +266,44 @@ main {
   font-weight: 600;
   color: var(--green-deep);
   text-transform: uppercase;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.6px;
 }
+.form-hint { font-size: 0.74rem; color: var(--muted); margin-top: -2px; }
 .form-input {
   padding: 11px 14px;
   border: 1.5px solid var(--parchment-dark);
-  border-radius: var(--radius);
-  font-size: 0.9rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.92rem;
   background: var(--white);
   color: var(--ink);
   transition: border-color 0.2s;
+  width: 100%;
 }
 .form-input:focus { outline: none; border-color: var(--green-bright); }
-select.form-input { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%232D6A4F' d='M1 1l5 5 5-5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+.form-input.error { border-color: var(--red); }
+.field-error { font-size: 0.74rem; color: var(--red); margin-top: -2px; display: none; }
+.field-error.show { display: block; }
+select.form-input {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%232D6A4F' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+}
+
 .cost-preview {
-  background: var(--parchment);
+  background: var(--green-pale);
   border-radius: var(--radius);
   padding: 16px;
   margin-top: 8px;
   border: 1.5px dashed var(--green-bright);
 }
 .cost-preview-label {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--green-mid);
+  font-weight: 700;
   margin-bottom: 10px;
 }
 .cost-breakdown { display: grid; gap: 6px; }
@@ -479,7 +319,7 @@ select.form-input { appearance: none; background-image: url("data:image/svg+xml,
   margin-top: 4px;
   font-weight: 700;
   font-family: 'Oswald', sans-serif;
-  font-size: 1rem;
+  font-size: 1.05rem;
   color: var(--green-deep);
 }
 .cost-val { font-variant-numeric: tabular-nums; font-weight: 600; }
@@ -487,7 +327,7 @@ select.form-input { appearance: none; background-image: url("data:image/svg+xml,
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  background: rgba(212,160,23,0.15);
+  background: var(--gold-pale);
   color: #7a5000;
   border-radius: 20px;
   padding: 4px 12px;
@@ -500,159 +340,174 @@ select.form-input { appearance: none; background-image: url("data:image/svg+xml,
   display: flex;
   gap: 12px;
   align-items: center;
+  flex-wrap: wrap;
 }
 .success-msg {
   display: none;
-  background: rgba(82,183,136,0.15);
+  background: var(--green-pale);
   border: 1.5px solid var(--green-bright);
-  color: var(--green-mid);
+  color: var(--green-deep);
   border-radius: var(--radius);
-  padding: 14px 16px;
+  padding: 16px;
   font-size: 0.88rem;
-  font-weight: 500;
+  line-height: 1.6;
   margin-top: 16px;
 }
 .success-msg.show { display: block; }
-
-/* ── ASK TAB (CHAT) ────────────────────────────────────── */
-.api-key-bar {
-  background: var(--white);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 14px 16px;
-  margin-bottom: 16px;
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-.api-key-bar input {
-  flex: 1;
-  padding: 9px 12px;
-  border: 1.5px solid var(--parchment-dark);
-  border-radius: var(--radius);
-  font-size: 0.82rem;
-  background: var(--parchment);
-}
-.api-key-bar input:focus { outline: none; border-color: var(--green-bright); }
-.api-key-label {
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: var(--green-deep);
-  white-space: nowrap;
-  letter-spacing: 0.5px;
-}
-.api-status {
-  font-size: 0.7rem;
-  color: var(--muted);
-  margin-top: 4px;
-}
-.chat-window {
-  background: var(--white);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  height: 380px;
-  overflow-y: auto;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 12px;
-  scroll-behavior: smooth;
-}
-.chat-msg {
-  max-width: 80%;
-  padding: 10px 14px;
-  border-radius: 12px;
-  font-size: 0.85rem;
-  line-height: 1.6;
-}
-.chat-msg.user {
-  background: var(--green-mid);
-  color: var(--white);
-  align-self: flex-end;
-  border-bottom-right-radius: 4px;
-}
-.chat-msg.assistant {
-  background: var(--parchment);
-  color: var(--ink);
-  align-self: flex-start;
-  border-bottom-left-radius: 4px;
-}
-.chat-msg.system {
-  background: rgba(82,183,136,0.1);
+.success-msg strong { color: var(--green-deep); }
+.success-id {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 1px;
   color: var(--green-mid);
-  align-self: center;
-  font-size: 0.78rem;
-  text-align: center;
-  max-width: 100%;
-  border-radius: var(--radius);
 }
-.chat-input-row {
+
+/* ── TRACK TAB ─────────────────────────────────────────── */
+.track-search {
   display: flex;
   gap: 10px;
+  margin-bottom: 18px;
 }
-.chat-input-row textarea {
+.track-search input {
   flex: 1;
-  padding: 11px 14px;
+  padding: 12px 14px;
   border: 1.5px solid var(--parchment-dark);
-  border-radius: var(--radius);
-  font-size: 0.88rem;
-  resize: none;
-  height: 48px;
+  border-radius: var(--radius-sm);
+  font-size: 0.92rem;
   background: var(--white);
   transition: border-color 0.2s;
-  line-height: 1.5;
+  text-transform: uppercase;
+}
+.track-search input:focus { outline: none; border-color: var(--green-bright); }
+
+.empty-state {
+  text-align: center;
+  padding: 36px 20px;
+  color: var(--muted);
+}
+.empty-state .emoji { font-size: 2rem; margin-bottom: 10px; }
+.empty-state .title { font-weight: 600; color: var(--ink); margin-bottom: 4px; font-size: 0.95rem; }
+.empty-state .desc { font-size: 0.82rem; line-height: 1.5; }
+
+.demo-note {
+  font-size: 0.78rem;
+  color: var(--muted);
+  background: var(--parchment);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  border-left: 3px solid var(--green-bright);
+}
+.demo-note button.linklike {
+  background: none; border: none; color: var(--green-mid); font-weight: 600;
+  text-decoration: underline; cursor: pointer; font-size: inherit; padding: 0;
+}
+
+.shipment-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px;
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  border-left: 4px solid transparent;
+  transition: box-shadow 0.2s;
+}
+.shipment-card:hover { box-shadow: var(--shadow-lift); }
+@media (max-width: 480px) { .shipment-card { flex-direction: column; } }
+.freshness-clock { flex-shrink: 0; width: 72px; height: 72px; position: relative; }
+.freshness-clock svg { width: 72px; height: 72px; }
+.clock-label { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+.clock-pct { font-family: 'Oswald', sans-serif; font-size: 1.05rem; font-weight: 700; line-height: 1; }
+.clock-sub { font-size: 0.52rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.shipment-info { flex: 1; min-width: 0; }
+.shipment-id {
+  font-size: 0.68rem; letter-spacing: 1.4px; text-transform: uppercase; color: var(--muted); margin-bottom: 2px;
+}
+.shipment-route {
+  font-family: 'Oswald', sans-serif; font-size: 1.1rem; font-weight: 600; color: var(--green-deep); margin-bottom: 6px;
+}
+.shipment-meta { font-size: 0.78rem; color: var(--muted); line-height: 1.7; }
+.shipment-meta b { color: var(--ink); font-weight: 600; }
+.status-badge {
+  display: inline-block; padding: 3px 11px; border-radius: 20px; font-size: 0.7rem; font-weight: 700;
+  margin-top: 8px; text-transform: uppercase; letter-spacing: 0.5px;
+}
+.status-transit { background: var(--green-pale); color: var(--green-mid); }
+.status-urgent  { background: var(--gold-pale); color: #9a6f00; }
+.status-overdue { background: var(--red-pale); color: var(--red); }
+.status-arrived { background: rgba(27,67,50,0.10); color: var(--green-deep); }
+
+/* ── COST CALCULATOR TAB ──────────────────────────────────── */
+.calc-mode-toggle { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+.calc-results { display: grid; gap: 10px; margin-top: 16px; }
+.calc-row {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--white); border-radius: var(--radius-sm); padding: 14px 16px;
+  box-shadow: var(--shadow); border-left: 4px solid var(--parchment-dark);
+}
+.calc-row.best { border-left-color: var(--green-bright); background: var(--green-pale); }
+.calc-row-dest { font-family: 'Oswald', sans-serif; font-weight: 600; color: var(--green-deep); font-size: 0.95rem; }
+.calc-row-meta { font-size: 0.74rem; color: var(--muted); margin-top: 2px; }
+.calc-row-cost { text-align: right; }
+.calc-row-cost .unit { font-size: 0.72rem; color: var(--muted); }
+.calc-row-cost .total { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 1.1rem; color: var(--green-mid); }
+.calc-row.best .calc-row-cost .total { color: var(--green-deep); }
+.best-tag {
+  display: inline-block; background: var(--green-bright); color: var(--green-deep);
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
+  padding: 2px 8px; border-radius: 10px; margin-left: 6px; vertical-align: middle;
+}
+.matrix-table-wrap { overflow-x: auto; }
+.matrix-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; min-width: 480px; }
+.matrix-table th {
+  background: var(--green-deep); color: var(--white); padding: 9px 12px; text-align: center;
+  font-family: 'Oswald', sans-serif; font-weight: 400; letter-spacing: 0.5px; font-size: 0.76rem;
+}
+.matrix-table th:first-child { text-align: left; }
+.matrix-table td { padding: 9px 12px; text-align: center; border-bottom: 1px solid var(--parchment-dark); font-variant-numeric: tabular-nums; }
+.matrix-table td:first-child { text-align: left; font-weight: 500; background: var(--parchment); }
+.cell-optimal { background: rgba(82,183,136,0.18) !important; font-weight: 700; color: var(--green-mid); }
+
+/* ── ASK TAB (CHAT) ────────────────────────────────────── */
+.chat-window {
+  background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow);
+  height: 400px; overflow-y: auto; padding: 16px; display: flex; flex-direction: column;
+  gap: 12px; margin-bottom: 12px; scroll-behavior: smooth;
+}
+.chat-msg { max-width: 82%; padding: 10px 14px; border-radius: 14px; font-size: 0.86rem; line-height: 1.6; white-space: pre-wrap; }
+.chat-msg.user { background: var(--green-mid); color: var(--white); align-self: flex-end; border-bottom-right-radius: 4px; }
+.chat-msg.assistant { background: var(--parchment); color: var(--ink); align-self: flex-start; border-bottom-left-radius: 4px; }
+.chat-msg.system { background: var(--green-pale); color: var(--green-mid); align-self: center; font-size: 0.78rem; text-align: center; max-width: 100%; border-radius: var(--radius-sm); }
+.chat-input-row { display: flex; gap: 10px; }
+.chat-input-row textarea {
+  flex: 1; padding: 12px 14px; border: 1.5px solid var(--parchment-dark); border-radius: var(--radius-sm);
+  font-size: 0.9rem; resize: none; height: 50px; background: var(--white); transition: border-color 0.2s; line-height: 1.5;
 }
 .chat-input-row textarea:focus { outline: none; border-color: var(--green-bright); }
-.suggested-questions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 12px;
-}
+.suggested-questions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
 .suggest-btn {
-  background: var(--white);
-  border: 1.5px solid var(--parchment-dark);
-  color: var(--green-mid);
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  transition: all 0.15s;
+  background: var(--white); border: 1.5px solid var(--parchment-dark); color: var(--green-mid);
+  padding: 7px 13px; border-radius: 20px; font-size: 0.76rem; font-weight: 500; transition: all 0.15s;
 }
-.suggest-btn:hover { border-color: var(--green-mid); background: rgba(45,106,79,0.07); }
+.suggest-btn:hover { border-color: var(--green-mid); background: var(--green-pale); }
 
 /* ── FOOTER ────────────────────────────────────────────── */
-footer {
-  background: var(--green-deep);
-  color: rgba(255,255,255,0.5);
-  text-align: center;
-  font-size: 0.72rem;
-  padding: 16px;
-  letter-spacing: 0.5px;
-}
+footer { background: var(--green-deep); color: rgba(255,255,255,0.45); text-align: center; font-size: 0.7rem; padding: 18px; letter-spacing: 0.4px; line-height: 1.6; }
+footer a { color: rgba(255,255,255,0.7); text-decoration: underline; }
 
 /* ── SPINNER ───────────────────────────────────────────── */
-.spinner {
-  display: inline-block;
-  width: 16px; height: 16px;
-  border: 2px solid rgba(255,255,255,0.3);
-  border-top-color: var(--white);
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-  vertical-align: middle;
-  margin-right: 6px;
-}
+.spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: var(--white); border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 6px; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* ── UTILITY ───────────────────────────────────────────── */
-.divider {
-  border: none;
-  border-top: 1px solid var(--parchment-dark);
-  margin: 20px 0;
-}
+.divider { border: none; border-top: 1px solid var(--parchment-dark); margin: 20px 0; }
 .mt8 { margin-top: 8px; }
 .mt16 { margin-top: 16px; }
+.text-muted { color: var(--muted); font-size: 0.82rem; }
 </style>
 </head>
 <body>
@@ -664,8 +519,9 @@ footer {
       <div class="logo"><span class="logo-leaf">🌿</span> MiraaTrans</div>
       <div class="tagline">Meru County · Farm to Market</div>
     </div>
-    <div style="font-size:0.72rem;color:rgba(255,255,255,0.4);text-align:right;line-height:1.6;">
-      VAM-Optimised<br>Logistics
+    <div class="role-pill" role="group" aria-label="Switch view">
+      <button id="roleFarmer" class="active" onclick="setRole('farmer')">Farmer</button>
+      <button id="roleBuyer" onclick="setRole('buyer')">Buyer</button>
     </div>
   </div>
 </header>
@@ -673,251 +529,90 @@ footer {
 <!-- TABS -->
 <nav class="tabs">
   <div class="tabs-inner">
-    <button class="tab-btn active" onclick="switchTab('overview', this)">Overview</button>
-    <button class="tab-btn" onclick="switchTab('track', this)">Track</button>
-    <button class="tab-btn" onclick="switchTab('request', this)">Request</button>
-    <button class="tab-btn" onclick="switchTab('ask', this)">Ask AI</button>
+    <button class="tab-btn active" onclick="switchTab('ship', this)"><span class="tab-icon">📦</span>Ship</button>
+    <button class="tab-btn" onclick="switchTab('track', this)"><span class="tab-icon">🚚</span>Track</button>
+    <button class="tab-btn" onclick="switchTab('calc', this)"><span class="tab-icon">💰</span>Cost</button>
+    <button class="tab-btn" onclick="switchTab('ask', this)"><span class="tab-icon">💬</span>Ask</button>
   </div>
 </nav>
 
 <!-- MAIN -->
 <main>
 
-  <!-- ══════════════ OVERVIEW TAB ══════════════ -->
-  <section id="tab-overview" class="tab-panel active">
+  <!-- ══════════════ SHIP TAB ══════════════ -->
+  <section id="tab-ship" class="tab-panel active">
 
-    <div class="hero-banner">
-      <div class="hero-eyebrow">DSA 8302 · Strathmore University</div>
-      <div class="hero-headline">Miraa reaches markets<br>or it's gone forever.</div>
-      <div class="hero-body">
-        MiraaTrans connects Meru County farmers to retailers across Kenya using a VAM-optimised
-        transport schedule. Every kilogram is tracked from harvest to market, with costs computed
-        from distance, road type, vehicle class, and perishability urgency.
-      </div>
-    </div>
-
-    <!-- Stats -->
-    <div class="stats-row">
-      <div class="stat-box">
-        <div class="stat-number">6,000</div>
-        <div class="stat-label">kg daily capacity (kg)</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-number" style="color:var(--gold);">48h</div>
-        <div class="stat-label">max freshness window</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-number">KES 101,700</div>
-        <div class="stat-label">optimal daily transport cost</div>
-      </div>
-    </div>
-
-    <!-- Cost Matrix -->
-    <div class="card">
-      <div class="card-title">Transportation Cost Matrix (KES/kg)</div>
-      <div style="overflow-x:auto;">
-        <table class="matrix-table">
-          <thead>
-            <tr>
-              <th>Source</th>
-              <th>Isiolo D1</th>
-              <th>Kilifi D2</th>
-              <th>Eastleigh D3</th>
-              <th>Likoni D4</th>
-              <th>Supply (kg)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Maua S1</td>
-              <td class="cell-cost-low">10</td>
-              <td class="cell-cost-mid">21</td>
-              <td class="cell-cost-mid">18</td>
-              <td class="cell-cost-high">23</td>
-              <td>2,500</td>
-            </tr>
-            <tr>
-              <td>Laare S2</td>
-              <td class="cell-cost-low">11</td>
-              <td class="cell-cost-mid">22</td>
-              <td class="cell-cost-low cell-optimal">16</td>
-              <td class="cell-cost-high">23</td>
-              <td>1,800</td>
-            </tr>
-            <tr>
-              <td>Kangeta S3</td>
-              <td class="cell-cost-low">10</td>
-              <td class="cell-cost-mid cell-optimal">21</td>
-              <td class="cell-cost-low">17</td>
-              <td class="cell-cost-high">23</td>
-              <td>1,700</td>
-            </tr>
-            <tr>
-              <td>Demand (kg)</td>
-              <td>1,500</td>
-              <td>1,500</td>
-              <td>2,000</td>
-              <td>1,000</td>
-              <td>6,000</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <p style="font-size:0.72rem;color:var(--muted);margin-top:10px;">
-        Highlighted cells are the VAM-optimal allocations confirmed optimal by linear programming (PuLP). Cost = base distance + road premium + vehicle premium + perishability urgency premium.
-      </p>
-    </div>
-
-    <!-- Optimal Routes -->
-    <div class="card">
-      <div class="card-title">Optimal Daily Routes (VAM Schedule)</div>
-      <div class="routes-grid">
-        <div class="route-card">
-          <div class="route-header">Maua <span class="route-arrow">→</span> Isiolo</div>
-          <div class="route-detail">1,500 kg · Probox pickup · ~1.5h<br>Murram road + urgency premium</div>
-          <div class="route-cost">KES 10/kg · Sub-total KES 15,000</div>
-        </div>
-        <div class="route-card">
-          <div class="route-header">Maua <span class="route-arrow">→</span> Likoni</div>
-          <div class="route-detail">1,000 kg · Ventilated lorry · ~8-10h<br>Long-haul coastal run</div>
-          <div class="route-cost">KES 23/kg · Sub-total KES 23,000</div>
-        </div>
-        <div class="route-card">
-          <div class="route-header">Laare <span class="route-arrow">→</span> Eastleigh</div>
-          <div class="route-detail">1,800 kg · 5-tonne lorry · ~4h<br>A2 highway, city congestion premium</div>
-          <div class="route-cost">KES 16/kg · Sub-total KES 28,800</div>
-        </div>
-        <div class="route-card">
-          <div class="route-header">Kangeta <span class="route-arrow">→</span> Kilifi</div>
-          <div class="route-detail">1,500 kg · Ventilated lorry · ~7h<br>Overnight planned coastal run</div>
-          <div class="route-cost">KES 21/kg · Sub-total KES 31,500</div>
-        </div>
-        <div class="route-card">
-          <div class="route-header">Kangeta <span class="route-arrow">→</span> Eastleigh</div>
-          <div class="route-detail">200 kg · 5-tonne lorry · ~4h<br>Top-up to meet Nairobi demand</div>
-          <div class="route-cost">KES 17/kg · Sub-total KES 3,400</div>
-        </div>
-        <div class="route-card" style="border-left-color:var(--gold);">
-          <div class="route-header" style="color:var(--gold);">Total Transport Cost</div>
-          <div class="route-detail">5 active routes · all 6,000 kg delivered<br>LP verification: OPTIMAL</div>
-          <div class="route-cost" style="color:var(--gold);">KES 101,700 / day</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Cost Components -->
-    <div class="card">
-      <div class="card-title">How costs are computed</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-        <div style="padding:12px;background:var(--parchment);border-radius:var(--radius);">
-          <div style="font-weight:600;font-size:0.8rem;color:var(--green-deep);margin-bottom:4px;">Base Distance</div>
-          <div style="font-size:0.78rem;color:var(--muted);">KES 0.04/kg/km. Maua-Isiolo 55km = KES 2.20/kg. Likoni routes reach KES 21/kg base.</div>
-        </div>
-        <div style="padding:12px;background:var(--parchment);border-radius:var(--radius);">
-          <div style="font-weight:600;font-size:0.8rem;color:var(--green-deep);margin-bottom:4px;">Road Premium</div>
-          <div style="font-size:0.78rem;color:var(--muted);">Isiolo murram +KES 3.50. Coastal wear +KES 0.50. A2 Nairobi +KES 0.00.</div>
-        </div>
-        <div style="padding:12px;background:var(--parchment);border-radius:var(--radius);">
-          <div style="font-weight:600;font-size:0.8rem;color:var(--green-deep);margin-bottom:4px;">Vehicle Premium</div>
-          <div style="font-size:0.78rem;color:var(--muted);">Probox/pickup +0. 5T lorry +KES 0.50. Refrigerated coastal lorry +KES 1.00.</div>
-        </div>
-        <div style="padding:12px;background:var(--parchment);border-radius:var(--radius);">
-          <div style="font-weight:600;font-size:0.8rem;color:var(--green-deep);margin-bottom:4px;">Urgency Premium</div>
-          <div style="font-size:0.78rem;color:var(--muted);">Same-day markets highest: Isiolo +KES 4.30, Nairobi +KES 4.20. Coastal planned runs: +KES 0.20-0.30.</div>
-        </div>
-      </div>
-    </div>
-
-  </section>
-
-  <!-- ══════════════ TRACK TAB ══════════════ -->
-  <section id="tab-track" class="tab-panel">
-
-    <div class="section-label">Retailer View</div>
-    <div class="section-title">Track Your Shipment</div>
-    <div class="section-sub">Enter a shipment ID to see real-time status and freshness. Miraa has a 48-hour window from harvest to market.</div>
-
-    <div class="track-search">
-      <input type="text" id="trackInput" placeholder="Enter shipment ID e.g. MT-001" />
-      <button class="btn-primary" onclick="trackShipment()">Track</button>
-    </div>
-
-    <div class="demo-note">
-      Demo mode: try IDs <strong>MT-001</strong>, <strong>MT-002</strong>, <strong>MT-003</strong>, or <strong>MT-004</strong> to see live examples.
-    </div>
-
-    <div id="trackResult"></div>
-
-    <div class="demo-shipments">
-      <div class="card-title" style="font-family:'Oswald',sans-serif;font-size:1rem;font-weight:600;color:var(--green-deep);margin-bottom:12px;">Active Shipments</div>
-      <div id="allShipments"></div>
-    </div>
-
-  </section>
-
-  <!-- ══════════════ REQUEST TAB ══════════════ -->
-  <section id="tab-request" class="tab-panel">
-
-    <div class="section-label">Farmer View</div>
-    <div class="section-title">Request Transport</div>
-    <div class="section-sub">Tell us where your miraa is, how much, and where it needs to go. We calculate the cost and urgency automatically.</div>
+    <div class="section-label" id="shipLabel">Farmer view</div>
+    <div class="section-title" id="shipTitle">Send your harvest to market</div>
+    <div class="section-sub" id="shipSub">Tell us where your miraa is, how much, and where it needs to go. We work out the cost and pickup urgency automatically.</div>
 
     <div class="card">
-      <div class="card-title">Your Harvest Details</div>
+      <div class="seg-toggle" role="group" aria-label="I am a">
+        <button id="segFarmer" class="active" onclick="setRole('farmer')">I'm a farmer</button>
+        <button id="segBuyer" onclick="setRole('buyer')">I'm a buyer</button>
+      </div>
+
+      <div class="card-title" id="shipCardTitle">Shipment details</div>
       <div class="form-grid">
 
         <div class="form-group">
-          <label class="form-label">Your Name</label>
-          <input type="text" class="form-input" id="farmerName" placeholder="e.g. Peter Mutua">
+          <label class="form-label" for="shipName" id="shipNameLabel">Your name</label>
+          <input type="text" class="form-input" id="shipName" placeholder="e.g. Peter Mutua">
+          <div class="field-error" id="err-shipName">Please enter your name.</div>
         </div>
 
         <div class="form-group">
-          <label class="form-label">Phone Number</label>
-          <input type="tel" class="form-input" id="farmerPhone" placeholder="07XX XXX XXX">
+          <label class="form-label" for="shipPhone">Phone number</label>
+          <input type="tel" class="form-input" id="shipPhone" placeholder="07XX XXX XXX">
+          <div class="field-error" id="err-shipPhone">Enter a valid phone number.</div>
         </div>
 
         <div class="form-group">
-          <label class="form-label">Source Location</label>
-          <select class="form-input" id="farmerSource" onchange="updateCostPreview()">
+          <label class="form-label" for="shipSource" id="shipSourceLabel">Pickup location</label>
+          <select class="form-input" id="shipSource" onchange="updateCostPreview()">
             <option value="">Select growing area</option>
-            <option value="0">Maua (S1)</option>
-            <option value="1">Laare (S2)</option>
-            <option value="2">Kangeta (S3)</option>
+            <option value="0">Maua</option>
+            <option value="1">Laare</option>
+            <option value="2">Kangeta</option>
           </select>
+          <div class="field-error" id="err-shipSource">Choose a pickup location.</div>
         </div>
 
         <div class="form-group">
-          <label class="form-label">Destination Market</label>
-          <select class="form-input" id="farmerDest" onchange="updateCostPreview()">
+          <label class="form-label" for="shipDest">Destination market</label>
+          <select class="form-input" id="shipDest" onchange="updateCostPreview()">
             <option value="">Select market</option>
-            <option value="0">Isiolo (D1)</option>
-            <option value="1">Kilifi (D2)</option>
-            <option value="2">Eastleigh, Nairobi (D3)</option>
-            <option value="3">Likoni, Mombasa (D4)</option>
+            <option value="0">Isiolo</option>
+            <option value="1">Kilifi</option>
+            <option value="2">Eastleigh, Nairobi</option>
+            <option value="3">Likoni, Mombasa</option>
           </select>
+          <div class="field-error" id="err-shipDest">Choose a destination market.</div>
         </div>
 
         <div class="form-group">
-          <label class="form-label">Quantity (kg)</label>
-          <input type="number" class="form-input" id="farmerQty" placeholder="e.g. 200" min="1" onchange="updateCostPreview()">
+          <label class="form-label" for="shipQty">Quantity (kg)</label>
+          <input type="number" class="form-input" id="shipQty" placeholder="e.g. 200" min="1" onchange="updateCostPreview()">
+          <div class="field-error" id="err-shipQty">Enter how many kg you're sending.</div>
         </div>
 
         <div class="form-group">
-          <label class="form-label">Harvest Time</label>
-          <input type="datetime-local" class="form-input" id="farmerTime">
+          <label class="form-label" for="shipTime" id="shipTimeLabel">Harvest time</label>
+          <input type="datetime-local" class="form-input" id="shipTime">
+          <div class="field-error" id="err-shipTime">Set the harvest time so we can track freshness.</div>
         </div>
 
-        <div class="form-group full">
-          <label class="form-label">Do you have a buyer already?</label>
-          <select class="form-input" id="farmerBuyer">
+        <div class="form-group full" id="buyerKnownGroup">
+          <label class="form-label" for="shipBuyerKnown">Do you have a buyer already?</label>
+          <select class="form-input" id="shipBuyerKnown">
             <option value="yes">Yes, I have a buyer</option>
             <option value="no">No, find me a market</option>
           </select>
         </div>
 
         <div class="form-group full">
-          <label class="form-label">Notes (optional)</label>
-          <textarea class="form-input" id="farmerNotes" rows="2" placeholder="Any special instructions for the transporter..."></textarea>
+          <label class="form-label" for="shipNotes">Notes (optional)</label>
+          <textarea class="form-input" id="shipNotes" rows="2" placeholder="Any special instructions for the transporter..."></textarea>
         </div>
 
       </div>
@@ -926,14 +621,14 @@ footer {
       <div id="costPreview" style="display:none;">
         <hr class="divider">
         <div class="cost-preview">
-          <div class="cost-preview-label">Estimated Transport Cost</div>
+          <div class="cost-preview-label">Estimated transport cost</div>
           <div class="cost-breakdown" id="costLines"></div>
           <div id="urgencyTag"></div>
         </div>
       </div>
 
       <div class="submit-row">
-        <button class="btn-primary" onclick="submitRequest()" id="submitBtn">Submit Request</button>
+        <button class="btn-primary" onclick="submitRequest()" id="submitBtn">Place order</button>
         <button class="btn-ghost" onclick="clearForm()">Clear</button>
       </div>
       <div class="success-msg" id="successMsg"></div>
@@ -941,36 +636,94 @@ footer {
 
   </section>
 
+  <!-- ══════════════ TRACK TAB ══════════════ -->
+  <section id="tab-track" class="tab-panel">
+
+    <div class="section-label">Live status</div>
+    <div class="section-title">Track your shipment</div>
+    <div class="section-sub">Enter a shipment ID to see where it is and how much freshness time is left. Miraa has a 48-hour window from harvest to market.</div>
+
+    <div class="track-search">
+      <input type="text" id="trackInput" placeholder="Shipment ID, e.g. MT-1234" onkeydown="if(event.key==='Enter')trackShipment()">
+      <button class="btn-primary" onclick="trackShipment()">Track</button>
+    </div>
+
+    <div class="demo-note">
+      No shipment ID yet? Try a sample: <button class="linklike" onclick="quickTrack('MT-1001')">MT-1001</button>,
+      <button class="linklike" onclick="quickTrack('MT-1002')">MT-1002</button>,
+      <button class="linklike" onclick="quickTrack('MT-1003')">MT-1003</button>, or
+      <button class="linklike" onclick="quickTrack('MT-1004')">MT-1004</button>.
+    </div>
+
+    <div id="trackResult"></div>
+
+    <div class="demo-shipments">
+      <div class="card-title" style="font-family:'Oswald',sans-serif;font-size:1rem;font-weight:600;color:var(--green-deep);margin-bottom:12px;">All active shipments</div>
+      <div id="allShipments"></div>
+    </div>
+
+  </section>
+
+  <!-- ══════════════ COST CALCULATOR TAB ══════════════ -->
+  <section id="tab-calc" class="tab-panel">
+
+    <div class="section-label">Plan ahead</div>
+    <div class="section-title">What will it cost?</div>
+    <div class="section-sub">Pick where your miraa is growing and see the delivery cost to every market — or find the cheapest one automatically.</div>
+
+    <div class="card">
+      <div class="card-title">Your growing area</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label" for="calcSource">Source</label>
+          <select class="form-input" id="calcSource" onchange="renderCalc()">
+            <option value="0">Maua</option>
+            <option value="1">Laare</option>
+            <option value="2">Kangeta</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="calcQty">Quantity (kg)</label>
+          <input type="number" class="form-input" id="calcQty" placeholder="e.g. 500" min="1" value="500" oninput="renderCalc()">
+        </div>
+      </div>
+
+      <div class="calc-mode-toggle">
+        <button class="btn-ghost" id="calcModeAll" onclick="setCalcMode('all')">Compare all markets</button>
+        <button class="btn-ghost" id="calcModeCheapest" onclick="setCalcMode('cheapest')">Just show cheapest</button>
+      </div>
+
+      <div id="calcResults" class="calc-results"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Full cost matrix (KES per kg)</div>
+      <div class="matrix-table-wrap">
+        <table class="matrix-table" id="matrixTable"></table>
+      </div>
+      <p class="text-muted mt16">Highlighted cells show the cheapest market for each growing area. Cost = base distance + road type + vehicle type + freshness urgency.</p>
+    </div>
+
+  </section>
+
   <!-- ══════════════ ASK TAB ══════════════ -->
   <section id="tab-ask" class="tab-panel">
 
-    <div class="section-label">Powered by Claude</div>
-    <div class="section-title">Ask Anything</div>
-    <div class="section-sub">Ask about transport costs, routes, timing, or miraa logistics. The assistant knows your exact cost matrix and optimal routes.</div>
-
-    <!-- API Key Bar -->
-    <div class="api-key-bar">
-      <div style="flex:1;">
-        <div class="api-key-label">Anthropic API Key</div>
-        <input type="password" id="apiKeyInput" placeholder="sk-ant-api03-..." oninput="saveApiKey()">
-        <div class="api-status" id="apiStatus">Enter your key from console.anthropic.com to enable AI answers.</div>
-      </div>
-    </div>
+    <div class="section-label">Quick answers</div>
+    <div class="section-title">Ask about your shipment</div>
+    <div class="section-sub">Ask about transport costs, routes, timing, or freshness. The assistant knows the full cost matrix and current routes.</div>
 
     <!-- Suggested questions -->
     <div class="suggested-questions">
-      <button class="suggest-btn" onclick="askSuggested(this)">What is the cheapest route from Laare?</button>
-      <button class="suggest-btn" onclick="askSuggested(this)">How long does Kilifi delivery take?</button>
-      <button class="suggest-btn" onclick="askSuggested(this)">Why is Isiolo urgency premium so high?</button>
-      <button class="suggest-btn" onclick="askSuggested(this)">What is VAM and why is it optimal here?</button>
-      <button class="suggest-btn" onclick="askSuggested(this)">How much to send 500kg from Maua to Nairobi?</button>
+      <button class="suggest-btn" onclick="askSuggested(this)">What's the cheapest route from Laare?</button>
+      <button class="suggest-btn" onclick="askSuggested(this)">How long does delivery to Kilifi take?</button>
+      <button class="suggest-btn" onclick="askSuggested(this)">Why is the Isiolo charge higher?</button>
+      <button class="suggest-btn" onclick="askSuggested(this)">Cost for 500kg from Maua to Nairobi?</button>
     </div>
 
     <!-- Chat window -->
     <div class="chat-window" id="chatWindow">
-      <div class="chat-msg system">
-        Welcome to MiraaTrans Assistant. Ask about routes, costs, timing, or miraa logistics.
-      </div>
+      <div class="chat-msg system">Ask me anything about routes, costs, timing, or your shipment.</div>
     </div>
 
     <div class="chat-input-row">
@@ -983,18 +736,19 @@ footer {
 </main>
 
 <footer>
-  MiraaTrans · DSA 8302, Strathmore Institute of Mathematical Sciences · VAM optimal solution KES 101,700 verified by PuLP LP
+  MiraaTrans · Connecting Meru County growers to market<br>
+  Need help? Call the support line on your order confirmation.
 </footer>
 
 <script>
 /* ══════════════════════════════════════════════════
    DATA
 ══════════════════════════════════════════════════ */
-const SOURCES = ["Maua (S1)", "Laare (S2)", "Kangeta (S3)"];
-const DESTS   = ["Isiolo (D1)", "Kilifi (D2)", "Eastleigh, Nairobi (D3)", "Likoni, Mombasa (D4)"];
+const SOURCES = ["Maua", "Laare", "Kangeta"];
+const DESTS   = ["Isiolo", "Kilifi", "Eastleigh, Nairobi", "Likoni, Mombasa"];
 const COST    = [[10,21,18,23],[11,22,16,23],[10,21,17,23]];
 const TRANSIT = [["1.5-2h","7-9h","4-5h","8-10h"],["1.5-2h","7-9h","4-5h","8-10h"],["1.5-2h","7-9h","4-5h","8-10h"]];
-const URGENCY = ["URGENT - same day","Planned overnight","City congestion","Planned overnight"];
+const URGENCY = ["Urgent — same day","Planned overnight","City congestion","Planned overnight"];
 const VEHICLE = ["Probox pickup","Ventilated lorry","5-tonne lorry","Ventilated lorry"];
 
 const COST_DETAIL = {
@@ -1004,52 +758,66 @@ const COST_DETAIL = {
   urgency: [[4.3,0.3,4.2,0.2],[4.3,0.3,4.2,0.2],[4.3,0.3,4.2,0.2]]
 };
 
+// The cheapest destination for each source (used to highlight the matrix)
+const CHEAPEST_PER_SOURCE = COST.map(row => row.indexOf(Math.min(...row)));
+
 const DEMO_SHIPMENTS = [
-  {
-    id: "MT-001",
-    route: "Laare → Eastleigh, Nairobi",
-    src: 1, dst: 2,
-    qty: 1800,
-    harvestTime: Date.now() - 3 * 3600 * 1000,
-    status: "In Transit",
-    driver: "James Kirimi",
-    plate: "KDD 456T",
-    note: "On A2 highway, ETA 1h"
-  },
-  {
-    id: "MT-002",
-    route: "Kangeta → Kilifi",
-    src: 2, dst: 1,
-    qty: 1500,
-    harvestTime: Date.now() - 6 * 3600 * 1000,
-    status: "In Transit",
-    driver: "Samuel Mwangi",
-    plate: "KBZ 102K",
-    note: "Past Mombasa junction"
-  },
-  {
-    id: "MT-003",
-    route: "Maua → Isiolo",
-    src: 0, dst: 0,
-    qty: 1500,
-    harvestTime: Date.now() - 1.2 * 3600 * 1000,
-    status: "Urgent",
-    driver: "Peter Mutua",
-    plate: "KCB 321M",
-    note: "Same-day delivery, 20 mins out"
-  },
-  {
-    id: "MT-004",
-    route: "Maua → Likoni, Mombasa",
-    src: 0, dst: 3,
-    qty: 1000,
-    harvestTime: Date.now() - 38 * 3600 * 1000,
-    status: "Arrived",
-    driver: "David Kariuki",
-    plate: "KDA 777P",
-    note: "Delivered at Likoni market 09:00"
-  }
+  { id: "MT-1001", src: 1, dst: 2, qty: 1800, harvestTime: Date.now() - 3 * 3600 * 1000,
+    status: "In Transit", driver: "James Kirimi", plate: "KDD 456T", note: "On the A2 highway, ETA 1h" },
+  { id: "MT-1002", src: 2, dst: 1, qty: 1500, harvestTime: Date.now() - 6 * 3600 * 1000,
+    status: "In Transit", driver: "Samuel Mwangi", plate: "KBZ 102K", note: "Past the Mombasa junction" },
+  { id: "MT-1003", src: 0, dst: 0, qty: 1500, harvestTime: Date.now() - 1.2 * 3600 * 1000,
+    status: "Urgent", driver: "Peter Mutua", plate: "KCB 321M", note: "Same-day delivery, 20 minutes out" },
+  { id: "MT-1004", src: 0, dst: 3, qty: 1000, harvestTime: Date.now() - 38 * 3600 * 1000,
+    status: "Arrived", driver: "David Kariuki", plate: "KDA 777P", note: "Delivered at Likoni market 09:00" }
 ];
+// Locally created orders get appended here so they're trackable in this session
+let userShipments = [];
+
+/* ══════════════════════════════════════════════════
+   ROLE (Farmer / Buyer)
+══════════════════════════════════════════════════ */
+let currentRole = 'farmer';
+
+function setRole(role) {
+  currentRole = role;
+  document.getElementById('roleFarmer').classList.toggle('active', role === 'farmer');
+  document.getElementById('roleBuyer').classList.toggle('active', role === 'buyer');
+  document.getElementById('segFarmer').classList.toggle('active', role === 'farmer');
+  document.getElementById('segBuyer').classList.toggle('active', role === 'buyer');
+
+  const label = document.getElementById('shipLabel');
+  const title = document.getElementById('shipTitle');
+  const sub = document.getElementById('shipSub');
+  const cardTitle = document.getElementById('shipCardTitle');
+  const nameLabel = document.getElementById('shipNameLabel');
+  const sourceLabel = document.getElementById('shipSourceLabel');
+  const timeLabel = document.getElementById('shipTimeLabel');
+  const buyerKnownGroup = document.getElementById('buyerKnownGroup');
+  const submitBtn = document.getElementById('submitBtn');
+
+  if (role === 'farmer') {
+    label.textContent = 'Farmer view';
+    title.textContent = 'Send your harvest to market';
+    sub.textContent = "Tell us where your miraa is, how much, and where it needs to go. We work out the cost and pickup urgency automatically.";
+    cardTitle.textContent = 'Shipment details';
+    nameLabel.textContent = 'Your name';
+    sourceLabel.textContent = 'Pickup location';
+    timeLabel.textContent = 'Harvest time';
+    buyerKnownGroup.style.display = '';
+    submitBtn.textContent = 'Place order';
+  } else {
+    label.textContent = 'Buyer view';
+    title.textContent = 'Place a shipment order';
+    sub.textContent = "Order miraa from a grower and have it delivered straight to your market. We'll show the cost before you confirm.";
+    cardTitle.textContent = 'Order details';
+    nameLabel.textContent = 'Your name';
+    sourceLabel.textContent = 'Order from (growing area)';
+    timeLabel.textContent = 'Needed by';
+    buyerKnownGroup.style.display = 'none';
+    submitBtn.textContent = 'Place shipment order';
+  }
+}
 
 /* ══════════════════════════════════════════════════
    TABS
@@ -1060,6 +828,7 @@ function switchTab(name, btn) {
   document.getElementById('tab-' + name).classList.add('active');
   btn.classList.add('active');
   if (name === 'track') renderAllShipments();
+  if (name === 'calc') renderCalc();
 }
 
 /* ══════════════════════════════════════════════════
@@ -1070,30 +839,25 @@ const WINDOW_HOURS = 48;
 function freshnessData(harvestTime) {
   const elapsed = (Date.now() - harvestTime) / 3600000;
   const pct = Math.max(0, Math.min(100, ((WINDOW_HOURS - elapsed) / WINDOW_HOURS) * 100));
-  const color = pct > 60 ? '#52B788' : pct > 30 ? '#D4A017' : '#E63946';
+  const color = pct > 60 ? '#52B788' : pct > 30 ? '#C8911A' : '#C0392B';
   const hoursLeft = Math.max(0, WINDOW_HOURS - elapsed).toFixed(1);
   return { pct, color, hoursLeft };
 }
 
 function clockSVG(pct, color) {
-  const r = 32, cx = 40, cy = 40;
+  const r = 28, cx = 36, cy = 36;
   const circ = 2 * Math.PI * r;
   const dash = (pct / 100) * circ;
-  return `<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#EDE8D5" stroke-width="7"/>
-    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="7"
+  return `<svg viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#EAE3CC" stroke-width="6"/>
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="6"
       stroke-dasharray="${dash} ${circ}" stroke-dashoffset="${circ * 0.25}"
       stroke-linecap="round" transform="rotate(-90 ${cx} ${cy})"/>
   </svg>`;
 }
 
 function statusBadge(s) {
-  const map = {
-    "In Transit": "status-transit",
-    "Urgent":     "status-urgent",
-    "Overdue":    "status-overdue",
-    "Arrived":    "status-arrived"
-  };
+  const map = { "In Transit": "status-transit", "Urgent": "status-urgent", "Overdue": "status-overdue", "Arrived": "status-arrived" };
   return `<span class="status-badge ${map[s] || 'status-transit'}">${s}</span>`;
 }
 
@@ -1111,10 +875,10 @@ function shipmentCardHTML(ship) {
     </div>
     <div class="shipment-info">
       <div class="shipment-id">${ship.id}</div>
-      <div class="shipment-route">${ship.route}</div>
+      <div class="shipment-route">${SOURCES[ship.src]} → ${DESTS[ship.dst]}</div>
       <div class="shipment-meta">
-        ${ship.qty.toLocaleString()} kg &nbsp;|&nbsp; ${fd.hoursLeft}h freshness left &nbsp;|&nbsp; KES ${cost.toLocaleString()}<br>
-        Driver: ${ship.driver} &nbsp;|&nbsp; ${ship.plate}<br>
+        <b>${ship.qty.toLocaleString()} kg</b> &nbsp;·&nbsp; ${fd.hoursLeft}h freshness left &nbsp;·&nbsp; <b>KES ${cost.toLocaleString()}</b><br>
+        Driver: ${ship.driver} &nbsp;·&nbsp; ${ship.plate}<br>
         ${ship.note}
       </div>
       ${statusBadge(ship.status)}
@@ -1122,30 +886,43 @@ function shipmentCardHTML(ship) {
   </div>`;
 }
 
+function findShipment(id) {
+  return DEMO_SHIPMENTS.find(s => s.id === id) || userShipments.find(s => s.id === id);
+}
+
+function quickTrack(id) {
+  document.getElementById('trackInput').value = id;
+  trackShipment();
+}
+
 function trackShipment() {
   const id = document.getElementById('trackInput').value.trim().toUpperCase();
   const el = document.getElementById('trackResult');
-  const ship = DEMO_SHIPMENTS.find(s => s.id === id);
+  if (!id) { el.innerHTML = ''; return; }
+  const ship = findShipment(id);
   if (!ship) {
-    el.innerHTML = `<div class="demo-note" style="border-left-color:var(--red);color:var(--red);">
-      Shipment "${id}" not found. Try MT-001 through MT-004.</div>`;
+    el.innerHTML = `<div class="empty-state">
+      <div class="emoji">📭</div>
+      <div class="title">No shipment found for "${id}"</div>
+      <div class="desc">Double check the ID on your order confirmation, or try a sample ID above.</div>
+    </div>`;
     return;
   }
   el.innerHTML = shipmentCardHTML(ship);
 }
 
 function renderAllShipments() {
-  document.getElementById('allShipments').innerHTML =
-    DEMO_SHIPMENTS.map(shipmentCardHTML).join('');
+  const all = [...userShipments, ...DEMO_SHIPMENTS];
+  document.getElementById('allShipments').innerHTML = all.map(shipmentCardHTML).join('');
 }
 
 /* ══════════════════════════════════════════════════
-   COST PREVIEW
+   COST PREVIEW (Ship tab)
 ══════════════════════════════════════════════════ */
 function updateCostPreview() {
-  const si = document.getElementById('farmerSource').value;
-  const di = document.getElementById('farmerDest').value;
-  const qty = parseFloat(document.getElementById('farmerQty').value) || 0;
+  const si = document.getElementById('shipSource').value;
+  const di = document.getElementById('shipDest').value;
+  const qty = parseFloat(document.getElementById('shipQty').value) || 0;
   const preview = document.getElementById('costPreview');
 
   if (si === '' || di === '') { preview.style.display = 'none'; return; }
@@ -1160,129 +937,145 @@ function updateCostPreview() {
 
   document.getElementById('costLines').innerHTML = `
     <div class="cost-line"><span>Base distance cost</span><span class="cost-val">KES ${base.toFixed(2)}/kg</span></div>
-    <div class="cost-line"><span>Road type premium</span><span class="cost-val">KES ${road.toFixed(2)}/kg</span></div>
-    <div class="cost-line"><span>Vehicle premium (${VEHICLE[d]})</span><span class="cost-val">KES ${vehicle.toFixed(2)}/kg</span></div>
-    <div class="cost-line"><span>Perishability urgency</span><span class="cost-val">KES ${urgency.toFixed(2)}/kg</span></div>
-    <div class="cost-line total"><span>Unit cost</span><span>KES ${total}/kg</span></div>
+    <div class="cost-line"><span>Road type</span><span class="cost-val">KES ${road.toFixed(2)}/kg</span></div>
+    <div class="cost-line"><span>Vehicle (${VEHICLE[d]})</span><span class="cost-val">KES ${vehicle.toFixed(2)}/kg</span></div>
+    <div class="cost-line"><span>Freshness urgency</span><span class="cost-val">KES ${urgency.toFixed(2)}/kg</span></div>
+    <div class="cost-line total"><span>Cost per kg</span><span>KES ${total}/kg</span></div>
     ${qty > 0 ? `<div class="cost-line total"><span>Total for ${qty.toLocaleString()} kg</span><span>KES ${totalKES.toLocaleString()}</span></div>` : ''}
   `;
   document.getElementById('urgencyTag').innerHTML =
-    `<div class="urgency-tag">⏱ ${URGENCY[d]} &nbsp;|&nbsp; Transit: ${TRANSIT[s][d]}</div>`;
+    `<div class="urgency-tag">⏱ ${URGENCY[d]} &nbsp;·&nbsp; Transit: ${TRANSIT[s][d]}</div>`;
 
   preview.style.display = 'block';
 }
 
 /* ══════════════════════════════════════════════════
-   REQUEST FORM
+   SHIPMENT FORM SUBMIT
 ══════════════════════════════════════════════════ */
-function submitRequest() {
-  const name  = document.getElementById('farmerName').value.trim();
-  const phone = document.getElementById('farmerPhone').value.trim();
-  const si    = document.getElementById('farmerSource').value;
-  const di    = document.getElementById('farmerDest').value;
-  const qty   = document.getElementById('farmerQty').value;
-  const time  = document.getElementById('farmerTime').value;
+function setFieldError(id, hasError) {
+  const input = document.getElementById(id);
+  const err = document.getElementById('err-' + id);
+  if (input) input.classList.toggle('error', hasError);
+  if (err) err.classList.toggle('show', hasError);
+}
 
-  if (!name || !phone || si === '' || di === '' || !qty || !time) {
-    alert('Please fill in all required fields.');
+function submitRequest() {
+  const name  = document.getElementById('shipName').value.trim();
+  const phone = document.getElementById('shipPhone').value.trim();
+  const si    = document.getElementById('shipSource').value;
+  const di    = document.getElementById('shipDest').value;
+  const qty   = document.getElementById('shipQty').value;
+  const time  = document.getElementById('shipTime').value;
+
+  const phoneOk = /^0?7\d{8}$/.test(phone.replace(/\s+/g, ''));
+
+  setFieldError('shipName', !name);
+  setFieldError('shipPhone', !phoneOk);
+  setFieldError('shipSource', si === '');
+  setFieldError('shipDest', di === '');
+  setFieldError('shipQty', !qty || parseFloat(qty) <= 0);
+  setFieldError('shipTime', !time);
+
+  if (!name || !phoneOk || si === '' || di === '' || !qty || parseFloat(qty) <= 0 || !time) {
     return;
   }
 
   const s = parseInt(si), d = parseInt(di);
+  const qtyNum = parseFloat(qty);
   const refId = 'MT-' + Math.floor(Math.random() * 9000 + 1000);
-  const cost  = COST[s][d] * parseFloat(qty);
+  const cost  = COST[s][d] * qtyNum;
+
+  // Make this order trackable immediately in the Track tab for this session.
+  userShipments.unshift({
+    id: refId, src: s, dst: d, qty: qtyNum,
+    harvestTime: new Date(time).getTime() || Date.now(),
+    status: "In Transit", driver: "Awaiting assignment", plate: "—",
+    note: currentRole === 'buyer' ? "Order placed, awaiting pickup confirmation" : "Awaiting transporter pickup"
+  });
 
   const msg = document.getElementById('successMsg');
+  const verb = currentRole === 'buyer' ? 'Order placed' : 'Request submitted';
   msg.innerHTML = `
-    Request submitted. Your reference ID is <strong>${refId}</strong>.<br>
-    Route: ${SOURCES[s]} to ${DESTS[d]} &nbsp;|&nbsp; ${parseFloat(qty).toLocaleString()} kg &nbsp;|&nbsp; Estimated cost: <strong>KES ${cost.toLocaleString()}</strong>.<br>
-    A transporter will contact you at ${phone} within 30 minutes.
+    ${verb}. Your shipment ID is <span class="success-id">${refId}</span><br><br>
+    Route: <b>${SOURCES[s]} → ${DESTS[d]}</b> &nbsp;·&nbsp; ${qtyNum.toLocaleString()} kg &nbsp;·&nbsp; Estimated cost: <b>KES ${cost.toLocaleString()}</b><br>
+    A transporter will contact ${phone} within 30 minutes. Use shipment ID <b>${refId}</b> in the Track tab to follow progress.
   `;
   msg.classList.add('show');
 
   document.getElementById('submitBtn').disabled = true;
-  setTimeout(() => {
-    document.getElementById('submitBtn').disabled = false;
-    msg.classList.remove('show');
-    clearForm();
-  }, 8000);
+  setTimeout(() => { document.getElementById('submitBtn').disabled = false; }, 4000);
 }
 
 function clearForm() {
-  ['farmerName','farmerPhone','farmerQty','farmerTime','farmerNotes'].forEach(id => {
-    document.getElementById(id).value = '';
-  });
-  document.getElementById('farmerSource').value = '';
-  document.getElementById('farmerDest').value = '';
-  document.getElementById('farmerBuyer').value = 'yes';
+  ['shipName','shipPhone','shipQty','shipTime','shipNotes'].forEach(id => { document.getElementById(id).value = ''; });
+  document.getElementById('shipSource').value = '';
+  document.getElementById('shipDest').value = '';
+  document.getElementById('shipBuyerKnown').value = 'yes';
   document.getElementById('costPreview').style.display = 'none';
   document.getElementById('successMsg').classList.remove('show');
+  ['shipName','shipPhone','shipSource','shipDest','shipQty','shipTime'].forEach(id => setFieldError(id, false));
 }
 
 /* ══════════════════════════════════════════════════
-   API KEY
+   COST CALCULATOR TAB
 ══════════════════════════════════════════════════ */
-function saveApiKey() {
-  const key = document.getElementById('apiKeyInput').value.trim();
-  const status = document.getElementById('apiStatus');
-  if (key.startsWith('sk-ant-')) {
-    sessionStorage.setItem('miraa_api_key', key);
-    status.textContent = 'Key saved for this session. Ready to answer questions.';
-    status.style.color = 'var(--green-mid)';
-  } else if (key.length > 0) {
-    status.textContent = 'Key format looks off. It should start with sk-ant-';
-    status.style.color = 'var(--red)';
-  } else {
-    status.textContent = 'Enter your key from console.anthropic.com to enable AI answers.';
-    status.style.color = 'var(--muted)';
-  }
+let calcMode = 'all';
+
+function setCalcMode(mode) {
+  calcMode = mode;
+  document.getElementById('calcModeAll').style.background = mode === 'all' ? 'var(--green-mid)' : '';
+  document.getElementById('calcModeAll').style.color = mode === 'all' ? 'var(--white)' : '';
+  document.getElementById('calcModeCheapest').style.background = mode === 'cheapest' ? 'var(--green-mid)' : '';
+  document.getElementById('calcModeCheapest').style.color = mode === 'cheapest' ? 'var(--white)' : '';
+  renderCalc();
 }
 
-function getApiKey() {
-  const stored = sessionStorage.getItem('miraa_api_key');
-  const input  = document.getElementById('apiKeyInput').value.trim();
-  return input.startsWith('sk-ant-') ? input : (stored || null);
+function renderCalc() {
+  const s = parseInt(document.getElementById('calcSource').value);
+  const qty = parseFloat(document.getElementById('calcQty').value) || 0;
+  const cheapestIdx = CHEAPEST_PER_SOURCE[s];
+
+  let order = [0,1,2,3].slice().sort((a,b) => COST[s][a] - COST[s][b]);
+  if (calcMode === 'cheapest') order = [cheapestIdx];
+
+  document.getElementById('calcResults').innerHTML = order.map(d => {
+    const unit = COST[s][d];
+    const total = unit * qty;
+    const isBest = d === cheapestIdx;
+    return `
+    <div class="calc-row ${isBest ? 'best' : ''}">
+      <div>
+        <div class="calc-row-dest">${DESTS[d]}${isBest ? '<span class="best-tag">Cheapest</span>' : ''}</div>
+        <div class="calc-row-meta">${VEHICLE[d]} &nbsp;·&nbsp; Transit ${TRANSIT[s][d]} &nbsp;·&nbsp; ${URGENCY[d]}</div>
+      </div>
+      <div class="calc-row-cost">
+        <div class="unit">KES ${unit}/kg</div>
+        <div class="total">${qty > 0 ? 'KES ' + total.toLocaleString() : '—'}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  renderMatrix();
+}
+
+function renderMatrix() {
+  let html = '<thead><tr><th>Source</th>' + DESTS.map(d => `<th>${d}</th>`).join('') + '</tr></thead><tbody>';
+  SOURCES.forEach((src, s) => {
+    html += `<tr><td>${src}</td>`;
+    DESTS.forEach((_, d) => {
+      const cls = d === CHEAPEST_PER_SOURCE[s] ? 'cell-optimal' : '';
+      html += `<td class="${cls}">${COST[s][d]}</td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</tbody>';
+  document.getElementById('matrixTable').innerHTML = html;
 }
 
 /* ══════════════════════════════════════════════════
-   CHAT
+   CHAT — calls our own /api/chat serverless function,
+   which holds the Anthropic API key server-side.
 ══════════════════════════════════════════════════ */
-const SYSTEM_PROMPT = `You are MiraaTrans Assistant, an expert on miraa (Catha edulis) transportation logistics from Meru County, Kenya.
-
-You have access to the following exact data:
-
-SOURCES:
-- Maua (S1): 2,500 kg supply
-- Laare (S2): 1,800 kg supply  
-- Kangeta (S3): 1,700 kg supply
-
-DESTINATIONS:
-- Isiolo (D1): 1,500 kg demand
-- Kilifi (D2): 1,500 kg demand
-- Eastleigh, Nairobi (D3): 2,000 kg demand
-- Likoni, Mombasa (D4): 1,000 kg demand
-
-COST MATRIX (KES/kg):
-         D1   D2   D3   D4
-Maua:    10   21   18   23
-Laare:   11   22   16   23
-Kangeta: 10   21   17   23
-
-COST COMPONENTS per route:
-Base: KES 0.04/kg/km. Road premium: Isiolo +3.50 (murram), Coastal +0.50, Nairobi +0.00. Vehicle: Probox (Isiolo) +0, 5T lorry (Nairobi) +0.50, Ventilated lorry (Coastal) +1.00. Urgency: Isiolo +4.30, Kilifi +0.30, Eastleigh +4.20, Likoni +0.20.
-
-OPTIMAL VAM SCHEDULE (confirmed optimal by PuLP linear programming, total KES 101,700):
-- Maua → Isiolo: 1,500 kg · KES 15,000
-- Maua → Likoni: 1,000 kg · KES 23,000
-- Laare → Eastleigh: 1,800 kg · KES 28,800
-- Kangeta → Kilifi: 1,500 kg · KES 31,500
-- Kangeta → Eastleigh: 200 kg · KES 3,400
-
-TRANSIT TIMES: Isiolo 1.5-2h, Kilifi 7-9h, Eastleigh 4-5h, Likoni 8-10h.
-FRESHNESS WINDOW: 24-48 hours from harvest.
-
-Answer clearly and practically. If someone asks about cost for a custom quantity, calculate it: cost = unit_cost * quantity. Be helpful to both farmers (who need to understand if transport is worth it) and retailers (who need to plan deliveries). Keep answers concise and in plain language.`;
-
 let chatHistory = [];
 
 function appendMsg(role, text) {
@@ -1308,12 +1101,6 @@ async function sendMessage() {
   const text  = input.value.trim();
   if (!text) return;
 
-  const key = getApiKey();
-  if (!key) {
-    appendMsg('system', 'Please enter your Anthropic API key in the box above to enable AI answers.');
-    return;
-  }
-
   input.value = '';
   appendMsg('user', text);
   chatHistory.push({ role: 'user', content: text });
@@ -1323,34 +1110,24 @@ async function sendMessage() {
   btn.disabled = true;
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch('/api/chat', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': key,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 600,
-        system: SYSTEM_PROMPT,
-        messages: chatHistory
-      })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: chatHistory })
     });
 
+    const data = await res.json();
+
     if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.error?.message || `HTTP ${res.status}`);
+      throw new Error(data.error || `Request failed (HTTP ${res.status})`);
     }
 
-    const data = await res.json();
-    const reply = data.content?.[0]?.text || 'No response received.';
+    const reply = data.reply || 'No response received.';
     chatHistory.push({ role: 'assistant', content: reply });
     appendMsg('assistant', reply);
 
   } catch (e) {
-    appendMsg('system', 'Error: ' + e.message + '. Check your API key and try again.');
+    appendMsg('system', 'Could not get a response: ' + e.message);
   } finally {
     btn.innerHTML = 'Send';
     btn.disabled = false;
@@ -1361,21 +1138,12 @@ async function sendMessage() {
 /* ══════════════════════════════════════════════════
    INIT
 ══════════════════════════════════════════════════ */
-// Set default harvest time to now
 const now = new Date();
 now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-document.getElementById('farmerTime').value = now.toISOString().slice(0,16);
+document.getElementById('shipTime').value = now.toISOString().slice(0,16);
 
-// Restore API key if set this session
-const storedKey = sessionStorage.getItem('miraa_api_key');
-if (storedKey) {
-  document.getElementById('apiKeyInput').value = storedKey;
-  document.getElementById('apiStatus').textContent = 'Key loaded from session.';
-  document.getElementById('apiStatus').style.color = 'var(--green-mid)';
-}
-
-// Auto-render shipments on page load so they show on first visit to Track tab
 renderAllShipments();
+renderCalc();
 </script>
 
 </body>

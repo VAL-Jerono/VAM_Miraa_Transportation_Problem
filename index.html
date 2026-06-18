@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MiraaTrans - Meru to Market</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS ────────────────────────────────────────────── */
+:root {
+  --green-deep:   #1B4332;
+  --green-mid:    #2D6A4F;
+  --green-bright: #52B788;
+  --parchment:    #F8F3E6;
+  --parchment-dark: #EDE8D5;
+  --gold:         #D4A017;
+  --ink:          #1A1A2E;
+  --muted:        #6B7280;
+  --red:          #E63946;
+  --white:        #FFFFFF;
+  --radius:       8px;
+  --shadow:       0 2px 12px rgba(27,67,50,0.10);
+}
+
+/* ── RESET ─────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--parchment);
+  color: var(--ink);
+  min-height: 100vh;
+}
+button { font-family: inherit; cursor: pointer; border: none; }
+input, select, textarea { font-family: inherit; }
+a { color: inherit; text-decoration: none; }
+
+/* ── HEADER ────────────────────────────────────────────── */
+header {
+  background: var(--green-deep);
+  color: var(--white);
+  padding: 0 20px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+.header-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+}
+.logo {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.logo-leaf { font-size: 1.2rem; }
+.tagline {
+  font-size: 0.7rem;
+  color: var(--green-bright);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* ── TABS ──────────────────────────────────────────────── */
+nav.tabs {
+  background: var(--green-deep);
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.tabs-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+}
+.tab-btn {
+  flex: 1;
+  padding: 12px 4px;
+  background: none;
+  color: rgba(255,255,255,0.55);
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  border-bottom: 3px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+.tab-btn:hover { color: rgba(255,255,255,0.85); }
+.tab-btn.active {
+  color: var(--green-bright);
+  border-bottom-color: var(--green-bright);
+}
+
+/* ── MAIN CONTAINER ────────────────────────────────────── */
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px 16px 60px;
+}
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ── SECTION LABEL ─────────────────────────────────────── */
+.section-label {
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--green-mid);
+  margin-bottom: 6px;
+}
+.section-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--green-deep);
+  line-height: 1.1;
+  margin-bottom: 10px;
+}
+.section-sub {
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 24px;
+  max-width: 600px;
+}
+
+/* ── CARD ──────────────────────────────────────────────── */
+.card {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.card-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--green-deep);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── OVERVIEW TAB ──────────────────────────────────────── */
+.hero-banner {
+  background: linear-gradient(135deg, var(--green-deep) 0%, var(--green-mid) 100%);
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  color: var(--white);
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-banner::after {
+  content: '';
+  position: absolute;
+  right: -20px; top: -20px;
+  width: 160px; height: 160px;
+  background: rgba(82,183,136,0.15);
+  border-radius: 50%;
+}
+.hero-eyebrow {
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--green-bright);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.hero-headline {
+  font-family: 'Oswald', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 10px;
+}
+.hero-body {
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.8);
+  line-height: 1.7;
+  max-width: 520px;
+}
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.stat-box {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 16px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.stat-number {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: var(--green-mid);
+}
+.stat-label {
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-top: 2px;
+  line-height: 1.3;
+}
+
+/* ── COST MATRIX TABLE ─────────────────────────────────── */
+.matrix-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  overflow-x: auto;
+  display: block;
+}
+.matrix-table th {
+  background: var(--green-deep);
+  color: var(--white);
+  padding: 9px 12px;
+  text-align: center;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  font-size: 0.78rem;
+}
+.matrix-table th:first-child { text-align: left; }
+.matrix-table td {
+  padding: 9px 12px;
+  text-align: center;
+  border-bottom: 1px solid var(--parchment-dark);
+  font-variant-numeric: tabular-nums;
+}
+.matrix-table td:first-child {
+  text-align: left;
+  font-weight: 500;
+  background: var(--parchment);
+}
+.matrix-table tr:last-child td {
+  background: var(--parchment-dark);
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--green-deep);
+}
+.cell-optimal {
+  background: rgba(82,183,136,0.18) !important;
+  font-weight: 700;
+  color: var(--green-mid);
+}
+.cell-cost-high { color: var(--red); font-weight: 600; }
+.cell-cost-mid  { color: var(--gold); font-weight: 600; }
+.cell-cost-low  { color: var(--green-mid); font-weight: 700; }
+
+/* ── ROUTE CARDS ───────────────────────────────────────── */
+.routes-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 520px) { .routes-grid { grid-template-columns: 1fr; } }
+.route-card {
+  border-left: 4px solid var(--green-bright);
+  background: var(--white);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 14px 16px;
+  box-shadow: var(--shadow);
+}
+.route-header {
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--green-deep);
+  margin-bottom: 6px;
+}
+.route-arrow { color: var(--green-bright); margin: 0 4px; }
+.route-detail {
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.route-cost {
+  margin-top: 6px;
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.05rem;
+  color: var(--green-mid);
+  font-weight: 600;
+}
+
+/* ── TRACK TAB ─────────────────────────────────────────── */
+.track-search {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.track-search input {
+  flex: 1;
+  padding: 11px 14px;
+  border: 1.5px solid var(--parchment-dark);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  background: var(--white);
+  transition: border-color 0.2s;
+}
+.track-search input:focus {
+  outline: none;
+  border-color: var(--green-bright);
+}
+.btn-primary {
+  background: var(--green-mid);
+  color: var(--white);
+  padding: 11px 20px;
+  border-radius: var(--radius);
+  font-family: 'Oswald', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+.btn-primary:hover { background: var(--green-deep); }
+.btn-ghost {
+  background: none;
+  border: 1.5px solid var(--green-mid);
+  color: var(--green-mid);
+  padding: 10px 20px;
+  border-radius: var(--radius);
+  font-family: 'Oswald', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+.btn-ghost:hover { background: var(--green-mid); color: var(--white); }
+
+/* ── FRESHNESS CLOCK ───────────────────────────────────── */
+.shipment-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+@media (max-width: 500px) { .shipment-card { flex-direction: column; } }
+.freshness-clock {
+  flex-shrink: 0;
+  width: 80px;
+  height: 80px;
+  position: relative;
+}
+.freshness-clock svg { width: 80px; height: 80px; }
+.clock-label {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+.clock-pct {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1;
+}
+.clock-sub {
+  font-size: 0.55rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.shipment-info { flex: 1; }
+.shipment-id {
+  font-size: 0.7rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 2px;
+}
+.shipment-route {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--green-deep);
+  margin-bottom: 6px;
+}
+.shipment-meta {
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.status-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  margin-top: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.status-transit  { background: rgba(82,183,136,0.15); color: var(--green-mid); }
+.status-urgent   { background: rgba(212,160,23,0.18); color: #9a6f00; }
+.status-overdue  { background: rgba(230,57,70,0.15); color: var(--red); }
+.status-arrived  { background: rgba(27,67,50,0.12); color: var(--green-deep); }
+
+.demo-shipments { margin-top: 4px; }
+.demo-note {
+  font-size: 0.78rem;
+  color: var(--muted);
+  background: var(--parchment);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  border-left: 3px solid var(--green-bright);
+}
+
+/* ── REQUEST TAB ───────────────────────────────────────── */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 520px) { .form-grid { grid-template-columns: 1fr; } }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group.full { grid-column: 1 / -1; }
+.form-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--green-deep);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+.form-input {
+  padding: 11px 14px;
+  border: 1.5px solid var(--parchment-dark);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  background: var(--white);
+  color: var(--ink);
+  transition: border-color 0.2s;
+}
+.form-input:focus { outline: none; border-color: var(--green-bright); }
+select.form-input { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%232D6A4F' d='M1 1l5 5 5-5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+.cost-preview {
+  background: var(--parchment);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-top: 8px;
+  border: 1.5px dashed var(--green-bright);
+}
+.cost-preview-label {
+  font-size: 0.72rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.cost-breakdown { display: grid; gap: 6px; }
+.cost-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  color: var(--ink);
+}
+.cost-line.total {
+  border-top: 1px solid var(--parchment-dark);
+  padding-top: 8px;
+  margin-top: 4px;
+  font-weight: 700;
+  font-family: 'Oswald', sans-serif;
+  font-size: 1rem;
+  color: var(--green-deep);
+}
+.cost-val { font-variant-numeric: tabular-nums; font-weight: 600; }
+.urgency-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(212,160,23,0.15);
+  color: #7a5000;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-top: 8px;
+}
+.submit-row {
+  margin-top: 18px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.success-msg {
+  display: none;
+  background: rgba(82,183,136,0.15);
+  border: 1.5px solid var(--green-bright);
+  color: var(--green-mid);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  margin-top: 16px;
+}
+.success-msg.show { display: block; }
+
+/* ── ASK TAB (CHAT) ────────────────────────────────────── */
+.api-key-bar {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.api-key-bar input {
+  flex: 1;
+  padding: 9px 12px;
+  border: 1.5px solid var(--parchment-dark);
+  border-radius: var(--radius);
+  font-size: 0.82rem;
+  background: var(--parchment);
+}
+.api-key-bar input:focus { outline: none; border-color: var(--green-bright); }
+.api-key-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--green-deep);
+  white-space: nowrap;
+  letter-spacing: 0.5px;
+}
+.api-status {
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.chat-window {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  height: 380px;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 12px;
+  scroll-behavior: smooth;
+}
+.chat-msg {
+  max-width: 80%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+.chat-msg.user {
+  background: var(--green-mid);
+  color: var(--white);
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+.chat-msg.assistant {
+  background: var(--parchment);
+  color: var(--ink);
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+.chat-msg.system {
+  background: rgba(82,183,136,0.1);
+  color: var(--green-mid);
+  align-self: center;
+  font-size: 0.78rem;
+  text-align: center;
+  max-width: 100%;
+  border-radius: var(--radius);
+}
+.chat-input-row {
+  display: flex;
+  gap: 10px;
+}
+.chat-input-row textarea {
+  flex: 1;
+  padding: 11px 14px;
+  border: 1.5px solid var(--parchment-dark);
+  border-radius: var(--radius);
+  font-size: 0.88rem;
+  resize: none;
+  height: 48px;
+  background: var(--white);
+  transition: border-color 0.2s;
+  line-height: 1.5;
+}
+.chat-input-row textarea:focus { outline: none; border-color: var(--green-bright); }
+.suggested-questions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.suggest-btn {
+  background: var(--white);
+  border: 1.5px solid var(--parchment-dark);
+  color: var(--green-mid);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.15s;
+}
+.suggest-btn:hover { border-color: var(--green-mid); background: rgba(45,106,79,0.07); }
+
+/* ── FOOTER ────────────────────────────────────────────── */
+footer {
+  background: var(--green-deep);
+  color: rgba(255,255,255,0.5);
+  text-align: center;
+  font-size: 0.72rem;
+  padding: 16px;
+  letter-spacing: 0.5px;
+}
+
+/* ── SPINNER ───────────────────────────────────────────── */
+.spinner {
+  display: inline-block;
+  width: 16px; height: 16px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: var(--white);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── UTILITY ───────────────────────────────────────────── */
+.divider {
+  border: none;
+  border-top: 1px solid var(--parchment-dark);
+  margin: 20px 0;
+}
+.mt8 { margin-top: 8px; }
+.mt16 { margin-top: 16px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div>
+      <div class="logo"><span class="logo-leaf">🌿</span> MiraaTrans</div>
+      <div class="tagline">Meru County · Farm to Market</div>
+    </div>
+    <div style="font-size:0.72rem;color:rgba(255,255,255,0.4);text-align:right;line-height:1.6;">
+      VAM-Optimised<br>Logistics
+    </div>
+  </div>
+</header>
+
+<!-- TABS -->
+<nav class="tabs">
+  <div class="tabs-inner">
+    <button class="tab-btn active" onclick="switchTab('overview', this)">Overview</button>
+    <button class="tab-btn" onclick="switchTab('track', this)">Track</button>
+    <button class="tab-btn" onclick="switchTab('request', this)">Request</button>
+    <button class="tab-btn" onclick="switchTab('ask', this)">Ask AI</button>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main>
+
+  <!-- ══════════════ OVERVIEW TAB ══════════════ -->
+  <section id="tab-overview" class="tab-panel active">
+
+    <div class="hero-banner">
+      <div class="hero-eyebrow">DSA 8302 · Strathmore University</div>
+      <div class="hero-headline">Miraa reaches markets<br>or it's gone forever.</div>
+      <div class="hero-body">
+        MiraaTrans connects Meru County farmers to retailers across Kenya using a VAM-optimised
+        transport schedule. Every kilogram is tracked from harvest to market, with costs computed
+        from distance, road type, vehicle class, and perishability urgency.
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-box">
+        <div class="stat-number">6,000</div>
+        <div class="stat-label">kg daily capacity (kg)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number" style="color:var(--gold);">48h</div>
+        <div class="stat-label">max freshness window</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number">KES 101,700</div>
+        <div class="stat-label">optimal daily transport cost</div>
+      </div>
+    </div>
+
+    <!-- Cost Matrix -->
+    <div class="card">
+      <div class="card-title">Transportation Cost Matrix (KES/kg)</div>
+      <div style="overflow-x:auto;">
+        <table class="matrix-table">
+          <thead>
+            <tr>
+              <th>Source</th>
+              <th>Isiolo D1</th>
+              <th>Kilifi D2</th>
+              <th>Eastleigh D3</th>
+              <th>Likoni D4</th>
+              <th>Supply (kg)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Maua S1</td>
+              <td class="cell-cost-low">10</td>
+              <td class="cell-cost-mid">21</td>
+              <td class="cell-cost-mid">18</td>
+              <td class="cell-cost-high">23</td>
+              <td>2,500</td>
+            </tr>
+            <tr>
+              <td>Laare S2</td>
+              <td class="cell-cost-low">11</td>
+              <td class="cell-cost-mid">22</td>
+              <td class="cell-cost-low cell-optimal">16</td>
+              <td class="cell-cost-high">23</td>
+              <td>1,800</td>
+            </tr>
+            <tr>
+              <td>Kangeta S3</td>
+              <td class="cell-cost-low">10</td>
+              <td class="cell-cost-mid cell-optimal">21</td>
+              <td class="cell-cost-low">17</td>
+              <td class="cell-cost-high">23</td>
+              <td>1,700</td>
+            </tr>
+            <tr>
+              <td>Demand (kg)</td>
+              <td>1,500</td>
+              <td>1,500</td>
+              <td>2,000</td>
+              <td>1,000</td>
+              <td>6,000</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.72rem;color:var(--muted);margin-top:10px;">
+        Highlighted cells are the VAM-optimal allocations confirmed optimal by linear programming (PuLP). Cost = base distance + road premium + vehicle premium + perishability urgency premium.
+      </p>
+    </div>
+
+    <!-- Optimal Routes -->
+    <div class="card">
+      <div class="card-title">Optimal Daily Routes (VAM Schedule)</div>
+      <div class="routes-grid">
+        <div class="route-card">
+          <div class="route-header">Maua <span class="route-arrow">→</span> Isiolo</div>
+          <div class="route-detail">1,500 kg · Probox pickup · ~1.5h<br>Murram road + urgency premium</div>
+          <div class="route-cost">KES 10/kg · Sub-total KES 15,000</div>
+        </div>
+        <div class="route-card">
+          <div class="route-header">Maua <span class="route-arrow">→</span> Likoni</div>
+          <div class="route-detail">1,000 kg · Ventilated lorry · ~8-10h<br>Long-haul coastal run</div>
+          <div class="route-cost">KES 23/kg · Sub-total KES 23,000</div>
+        </div>
+        <div class="route-card">
+          <div class="route-header">Laare <span class="route-arrow">→</span> Eastleigh</div>
+          <div class="route-detail">1,800 kg · 5-tonne lorry · ~4h<br>A2 highway, city congestion premium</div>
+          <div class="route-cost">KES 16/kg · Sub-total KES 28,800</div>
+        </div>
+        <div class="route-card">
+          <div class="route-header">Kangeta <span class="route-arrow">→</span> Kilifi</div>
+          <div class="route-detail">1,500 kg · Ventilated lorry · ~7h<br>Overnight planned coastal run</div>
+          <div class="route-cost">KES 21/kg · Sub-total KES 31,500</div>
+        </div>
+        <div class="route-card">
+          <div class="route-header">Kangeta <span class="route-arrow">→</span> Eastleigh</div>
+          <div class="route-detail">200 kg · 5-tonne lorry · ~4h<br>Top-up to meet Nairobi demand</div>
+          <div class="route-cost">KES 17/kg · Sub-total KES 3,400</div>
+        </div>
+        <div class="route-card" style="border-left-color:var(--gold);">
+          <div class="route-header" style="color:var(--gold);">Total Transport Cost</div>
+          <div class="route-detail">5 active routes · all 6,000 kg delivered<br>LP verification: OPTIMAL</div>
+          <div class="route-cost" style="color:var(--gold);">KES 101,700 / day</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cost Components -->
+    <div class="card">
+      <div class="card-title">How costs are computed</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div style="padding:12px;background:var(--parchment);border-radius:var(--radius);">
+          <div style="font-weight:600;font-size:0.8rem;color:var(--green-deep);margin-bottom:4px;">Base Distance</div>
+          <div style="font-size:0.78rem;color:var(--muted);">KES 0.04/kg/km. Maua-Isiolo 55km = KES 2.20/kg. Likoni routes reach KES 21/kg base.</div>
+        </div>
+        <div style="padding:12px;background:var(--parchment);border-radius:var(--radius);">
+          <div style="font-weight:600;font-size:0.8rem;color:var(--green-deep);margin-bottom:4px;">Road Premium</div>
+          <div style="font-size:0.78rem;color:var(--muted);">Isiolo murram +KES 3.50. Coastal wear +KES 0.50. A2 Nairobi +KES 0.00.</div>
+        </div>
+        <div style="padding:12px;background:var(--parchment);border-radius:var(--radius);">
+          <div style="font-weight:600;font-size:0.8rem;color:var(--green-deep);margin-bottom:4px;">Vehicle Premium</div>
+          <div style="font-size:0.78rem;color:var(--muted);">Probox/pickup +0. 5T lorry +KES 0.50. Refrigerated coastal lorry +KES 1.00.</div>
+        </div>
+        <div style="padding:12px;background:var(--parchment);border-radius:var(--radius);">
+          <div style="font-weight:600;font-size:0.8rem;color:var(--green-deep);margin-bottom:4px;">Urgency Premium</div>
+          <div style="font-size:0.78rem;color:var(--muted);">Same-day markets highest: Isiolo +KES 4.30, Nairobi +KES 4.20. Coastal planned runs: +KES 0.20-0.30.</div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══════════════ TRACK TAB ══════════════ -->
+  <section id="tab-track" class="tab-panel">
+
+    <div class="section-label">Retailer View</div>
+    <div class="section-title">Track Your Shipment</div>
+    <div class="section-sub">Enter a shipment ID to see real-time status and freshness. Miraa has a 48-hour window from harvest to market.</div>
+
+    <div class="track-search">
+      <input type="text" id="trackInput" placeholder="Enter shipment ID e.g. MT-001" />
+      <button class="btn-primary" onclick="trackShipment()">Track</button>
+    </div>
+
+    <div class="demo-note">
+      Demo mode: try IDs <strong>MT-001</strong>, <strong>MT-002</strong>, <strong>MT-003</strong>, or <strong>MT-004</strong> to see live examples.
+    </div>
+
+    <div id="trackResult"></div>
+
+    <div class="demo-shipments">
+      <div class="card-title" style="font-family:'Oswald',sans-serif;font-size:1rem;font-weight:600;color:var(--green-deep);margin-bottom:12px;">Active Shipments</div>
+      <div id="allShipments"></div>
+    </div>
+
+  </section>
+
+  <!-- ══════════════ REQUEST TAB ══════════════ -->
+  <section id="tab-request" class="tab-panel">
+
+    <div class="section-label">Farmer View</div>
+    <div class="section-title">Request Transport</div>
+    <div class="section-sub">Tell us where your miraa is, how much, and where it needs to go. We calculate the cost and urgency automatically.</div>
+
+    <div class="card">
+      <div class="card-title">Your Harvest Details</div>
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label class="form-label">Your Name</label>
+          <input type="text" class="form-input" id="farmerName" placeholder="e.g. Peter Mutua">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input type="tel" class="form-input" id="farmerPhone" placeholder="07XX XXX XXX">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Source Location</label>
+          <select class="form-input" id="farmerSource" onchange="updateCostPreview()">
+            <option value="">Select growing area</option>
+            <option value="0">Maua (S1)</option>
+            <option value="1">Laare (S2)</option>
+            <option value="2">Kangeta (S3)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Destination Market</label>
+          <select class="form-input" id="farmerDest" onchange="updateCostPreview()">
+            <option value="">Select market</option>
+            <option value="0">Isiolo (D1)</option>
+            <option value="1">Kilifi (D2)</option>
+            <option value="2">Eastleigh, Nairobi (D3)</option>
+            <option value="3">Likoni, Mombasa (D4)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Quantity (kg)</label>
+          <input type="number" class="form-input" id="farmerQty" placeholder="e.g. 200" min="1" onchange="updateCostPreview()">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Harvest Time</label>
+          <input type="datetime-local" class="form-input" id="farmerTime">
+        </div>
+
+        <div class="form-group full">
+          <label class="form-label">Do you have a buyer already?</label>
+          <select class="form-input" id="farmerBuyer">
+            <option value="yes">Yes, I have a buyer</option>
+            <option value="no">No, find me a market</option>
+          </select>
+        </div>
+
+        <div class="form-group full">
+          <label class="form-label">Notes (optional)</label>
+          <textarea class="form-input" id="farmerNotes" rows="2" placeholder="Any special instructions for the transporter..."></textarea>
+        </div>
+
+      </div>
+
+      <!-- Cost Preview -->
+      <div id="costPreview" style="display:none;">
+        <hr class="divider">
+        <div class="cost-preview">
+          <div class="cost-preview-label">Estimated Transport Cost</div>
+          <div class="cost-breakdown" id="costLines"></div>
+          <div id="urgencyTag"></div>
+        </div>
+      </div>
+
+      <div class="submit-row">
+        <button class="btn-primary" onclick="submitRequest()" id="submitBtn">Submit Request</button>
+        <button class="btn-ghost" onclick="clearForm()">Clear</button>
+      </div>
+      <div class="success-msg" id="successMsg"></div>
+    </div>
+
+  </section>
+
+  <!-- ══════════════ ASK TAB ══════════════ -->
+  <section id="tab-ask" class="tab-panel">
+
+    <div class="section-label">Powered by Claude</div>
+    <div class="section-title">Ask Anything</div>
+    <div class="section-sub">Ask about transport costs, routes, timing, or miraa logistics. The assistant knows your exact cost matrix and optimal routes.</div>
+
+    <!-- API Key Bar -->
+    <div class="api-key-bar">
+      <div style="flex:1;">
+        <div class="api-key-label">Anthropic API Key</div>
+        <input type="password" id="apiKeyInput" placeholder="sk-ant-api03-..." oninput="saveApiKey()">
+        <div class="api-status" id="apiStatus">Enter your key from console.anthropic.com to enable AI answers.</div>
+      </div>
+    </div>
+
+    <!-- Suggested questions -->
+    <div class="suggested-questions">
+      <button class="suggest-btn" onclick="askSuggested(this)">What is the cheapest route from Laare?</button>
+      <button class="suggest-btn" onclick="askSuggested(this)">How long does Kilifi delivery take?</button>
+      <button class="suggest-btn" onclick="askSuggested(this)">Why is Isiolo urgency premium so high?</button>
+      <button class="suggest-btn" onclick="askSuggested(this)">What is VAM and why is it optimal here?</button>
+      <button class="suggest-btn" onclick="askSuggested(this)">How much to send 500kg from Maua to Nairobi?</button>
+    </div>
+
+    <!-- Chat window -->
+    <div class="chat-window" id="chatWindow">
+      <div class="chat-msg system">
+        Welcome to MiraaTrans Assistant. Ask about routes, costs, timing, or miraa logistics.
+      </div>
+    </div>
+
+    <div class="chat-input-row">
+      <textarea id="chatInput" placeholder="Type your question..." onkeydown="handleChatKey(event)"></textarea>
+      <button class="btn-primary" id="sendBtn" onclick="sendMessage()">Send</button>
+    </div>
+
+  </section>
+
+</main>
+
+<footer>
+  MiraaTrans · DSA 8302, Strathmore Institute of Mathematical Sciences · VAM optimal solution KES 101,700 verified by PuLP LP
+</footer>
+
+<script>
+/* ══════════════════════════════════════════════════
+   DATA
+══════════════════════════════════════════════════ */
+const SOURCES = ["Maua (S1)", "Laare (S2)", "Kangeta (S3)"];
+const DESTS   = ["Isiolo (D1)", "Kilifi (D2)", "Eastleigh, Nairobi (D3)", "Likoni, Mombasa (D4)"];
+const COST    = [[10,21,18,23],[11,22,16,23],[10,21,17,23]];
+const TRANSIT = [["1.5-2h","7-9h","4-5h","8-10h"],["1.5-2h","7-9h","4-5h","8-10h"],["1.5-2h","7-9h","4-5h","8-10h"]];
+const URGENCY = ["URGENT - same day","Planned overnight","City congestion","Planned overnight"];
+const VEHICLE = ["Probox pickup","Ventilated lorry","5-tonne lorry","Ventilated lorry"];
+
+const COST_DETAIL = {
+  base:    [[2.2,19.2,12.8,21.2],[3.0,20.0,11.6,21.6],[2.6,19.6,12.2,20.8]],
+  road:    [[3.5,0.5,0.0,0.5],[3.5,0.5,0.0,0.5],[3.5,0.5,0.0,0.5]],
+  vehicle: [[0.0,1.0,0.5,1.0],[0.0,1.0,0.5,1.0],[0.0,1.0,0.5,1.0]],
+  urgency: [[4.3,0.3,4.2,0.2],[4.3,0.3,4.2,0.2],[4.3,0.3,4.2,0.2]]
+};
+
+const DEMO_SHIPMENTS = [
+  {
+    id: "MT-001",
+    route: "Laare → Eastleigh, Nairobi",
+    src: 1, dst: 2,
+    qty: 1800,
+    harvestTime: Date.now() - 3 * 3600 * 1000,
+    status: "In Transit",
+    driver: "James Kirimi",
+    plate: "KDD 456T",
+    note: "On A2 highway, ETA 1h"
+  },
+  {
+    id: "MT-002",
+    route: "Kangeta → Kilifi",
+    src: 2, dst: 1,
+    qty: 1500,
+    harvestTime: Date.now() - 6 * 3600 * 1000,
+    status: "In Transit",
+    driver: "Samuel Mwangi",
+    plate: "KBZ 102K",
+    note: "Past Mombasa junction"
+  },
+  {
+    id: "MT-003",
+    route: "Maua → Isiolo",
+    src: 0, dst: 0,
+    qty: 1500,
+    harvestTime: Date.now() - 1.2 * 3600 * 1000,
+    status: "Urgent",
+    driver: "Peter Mutua",
+    plate: "KCB 321M",
+    note: "Same-day delivery, 20 mins out"
+  },
+  {
+    id: "MT-004",
+    route: "Maua → Likoni, Mombasa",
+    src: 0, dst: 3,
+    qty: 1000,
+    harvestTime: Date.now() - 38 * 3600 * 1000,
+    status: "Arrived",
+    driver: "David Kariuki",
+    plate: "KDA 777P",
+    note: "Delivered at Likoni market 09:00"
+  }
+];
+
+/* ══════════════════════════════════════════════════
+   TABS
+══════════════════════════════════════════════════ */
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+  if (name === 'track') renderAllShipments();
+}
+
+/* ══════════════════════════════════════════════════
+   FRESHNESS CLOCK
+══════════════════════════════════════════════════ */
+const WINDOW_HOURS = 48;
+
+function freshnessData(harvestTime) {
+  const elapsed = (Date.now() - harvestTime) / 3600000;
+  const pct = Math.max(0, Math.min(100, ((WINDOW_HOURS - elapsed) / WINDOW_HOURS) * 100));
+  const color = pct > 60 ? '#52B788' : pct > 30 ? '#D4A017' : '#E63946';
+  const hoursLeft = Math.max(0, WINDOW_HOURS - elapsed).toFixed(1);
+  return { pct, color, hoursLeft };
+}
+
+function clockSVG(pct, color) {
+  const r = 32, cx = 40, cy = 40;
+  const circ = 2 * Math.PI * r;
+  const dash = (pct / 100) * circ;
+  return `<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#EDE8D5" stroke-width="7"/>
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="7"
+      stroke-dasharray="${dash} ${circ}" stroke-dashoffset="${circ * 0.25}"
+      stroke-linecap="round" transform="rotate(-90 ${cx} ${cy})"/>
+  </svg>`;
+}
+
+function statusBadge(s) {
+  const map = {
+    "In Transit": "status-transit",
+    "Urgent":     "status-urgent",
+    "Overdue":    "status-overdue",
+    "Arrived":    "status-arrived"
+  };
+  return `<span class="status-badge ${map[s] || 'status-transit'}">${s}</span>`;
+}
+
+function shipmentCardHTML(ship) {
+  const fd = freshnessData(ship.harvestTime);
+  const cost = COST[ship.src][ship.dst] * ship.qty;
+  return `
+  <div class="shipment-card">
+    <div class="freshness-clock">
+      ${clockSVG(fd.pct, fd.color)}
+      <div class="clock-label">
+        <div class="clock-pct" style="color:${fd.color}">${Math.round(fd.pct)}%</div>
+        <div class="clock-sub">fresh</div>
+      </div>
+    </div>
+    <div class="shipment-info">
+      <div class="shipment-id">${ship.id}</div>
+      <div class="shipment-route">${ship.route}</div>
+      <div class="shipment-meta">
+        ${ship.qty.toLocaleString()} kg &nbsp;|&nbsp; ${fd.hoursLeft}h freshness left &nbsp;|&nbsp; KES ${cost.toLocaleString()}<br>
+        Driver: ${ship.driver} &nbsp;|&nbsp; ${ship.plate}<br>
+        ${ship.note}
+      </div>
+      ${statusBadge(ship.status)}
+    </div>
+  </div>`;
+}
+
+function trackShipment() {
+  const id = document.getElementById('trackInput').value.trim().toUpperCase();
+  const el = document.getElementById('trackResult');
+  const ship = DEMO_SHIPMENTS.find(s => s.id === id);
+  if (!ship) {
+    el.innerHTML = `<div class="demo-note" style="border-left-color:var(--red);color:var(--red);">
+      Shipment "${id}" not found. Try MT-001 through MT-004.</div>`;
+    return;
+  }
+  el.innerHTML = shipmentCardHTML(ship);
+}
+
+function renderAllShipments() {
+  document.getElementById('allShipments').innerHTML =
+    DEMO_SHIPMENTS.map(shipmentCardHTML).join('');
+}
+
+/* ══════════════════════════════════════════════════
+   COST PREVIEW
+══════════════════════════════════════════════════ */
+function updateCostPreview() {
+  const si = document.getElementById('farmerSource').value;
+  const di = document.getElementById('farmerDest').value;
+  const qty = parseFloat(document.getElementById('farmerQty').value) || 0;
+  const preview = document.getElementById('costPreview');
+
+  if (si === '' || di === '') { preview.style.display = 'none'; return; }
+  const s = parseInt(si), d = parseInt(di);
+
+  const base    = COST_DETAIL.base[s][d];
+  const road    = COST_DETAIL.road[s][d];
+  const vehicle = COST_DETAIL.vehicle[s][d];
+  const urgency = COST_DETAIL.urgency[s][d];
+  const total   = COST[s][d];
+  const totalKES = total * qty;
+
+  document.getElementById('costLines').innerHTML = `
+    <div class="cost-line"><span>Base distance cost</span><span class="cost-val">KES ${base.toFixed(2)}/kg</span></div>
+    <div class="cost-line"><span>Road type premium</span><span class="cost-val">KES ${road.toFixed(2)}/kg</span></div>
+    <div class="cost-line"><span>Vehicle premium (${VEHICLE[d]})</span><span class="cost-val">KES ${vehicle.toFixed(2)}/kg</span></div>
+    <div class="cost-line"><span>Perishability urgency</span><span class="cost-val">KES ${urgency.toFixed(2)}/kg</span></div>
+    <div class="cost-line total"><span>Unit cost</span><span>KES ${total}/kg</span></div>
+    ${qty > 0 ? `<div class="cost-line total"><span>Total for ${qty.toLocaleString()} kg</span><span>KES ${totalKES.toLocaleString()}</span></div>` : ''}
+  `;
+  document.getElementById('urgencyTag').innerHTML =
+    `<div class="urgency-tag">⏱ ${URGENCY[d]} &nbsp;|&nbsp; Transit: ${TRANSIT[s][d]}</div>`;
+
+  preview.style.display = 'block';
+}
+
+/* ══════════════════════════════════════════════════
+   REQUEST FORM
+══════════════════════════════════════════════════ */
+function submitRequest() {
+  const name  = document.getElementById('farmerName').value.trim();
+  const phone = document.getElementById('farmerPhone').value.trim();
+  const si    = document.getElementById('farmerSource').value;
+  const di    = document.getElementById('farmerDest').value;
+  const qty   = document.getElementById('farmerQty').value;
+  const time  = document.getElementById('farmerTime').value;
+
+  if (!name || !phone || si === '' || di === '' || !qty || !time) {
+    alert('Please fill in all required fields.');
+    return;
+  }
+
+  const s = parseInt(si), d = parseInt(di);
+  const refId = 'MT-' + Math.floor(Math.random() * 9000 + 1000);
+  const cost  = COST[s][d] * parseFloat(qty);
+
+  const msg = document.getElementById('successMsg');
+  msg.innerHTML = `
+    Request submitted. Your reference ID is <strong>${refId}</strong>.<br>
+    Route: ${SOURCES[s]} to ${DESTS[d]} &nbsp;|&nbsp; ${parseFloat(qty).toLocaleString()} kg &nbsp;|&nbsp; Estimated cost: <strong>KES ${cost.toLocaleString()}</strong>.<br>
+    A transporter will contact you at ${phone} within 30 minutes.
+  `;
+  msg.classList.add('show');
+
+  document.getElementById('submitBtn').disabled = true;
+  setTimeout(() => {
+    document.getElementById('submitBtn').disabled = false;
+    msg.classList.remove('show');
+    clearForm();
+  }, 8000);
+}
+
+function clearForm() {
+  ['farmerName','farmerPhone','farmerQty','farmerTime','farmerNotes'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('farmerSource').value = '';
+  document.getElementById('farmerDest').value = '';
+  document.getElementById('farmerBuyer').value = 'yes';
+  document.getElementById('costPreview').style.display = 'none';
+  document.getElementById('successMsg').classList.remove('show');
+}
+
+/* ══════════════════════════════════════════════════
+   API KEY
+══════════════════════════════════════════════════ */
+function saveApiKey() {
+  const key = document.getElementById('apiKeyInput').value.trim();
+  const status = document.getElementById('apiStatus');
+  if (key.startsWith('sk-ant-')) {
+    sessionStorage.setItem('miraa_api_key', key);
+    status.textContent = 'Key saved for this session. Ready to answer questions.';
+    status.style.color = 'var(--green-mid)';
+  } else if (key.length > 0) {
+    status.textContent = 'Key format looks off. It should start with sk-ant-';
+    status.style.color = 'var(--red)';
+  } else {
+    status.textContent = 'Enter your key from console.anthropic.com to enable AI answers.';
+    status.style.color = 'var(--muted)';
+  }
+}
+
+function getApiKey() {
+  const stored = sessionStorage.getItem('miraa_api_key');
+  const input  = document.getElementById('apiKeyInput').value.trim();
+  return input.startsWith('sk-ant-') ? input : (stored || null);
+}
+
+/* ══════════════════════════════════════════════════
+   CHAT
+══════════════════════════════════════════════════ */
+const SYSTEM_PROMPT = `You are MiraaTrans Assistant, an expert on miraa (Catha edulis) transportation logistics from Meru County, Kenya.
+
+You have access to the following exact data:
+
+SOURCES:
+- Maua (S1): 2,500 kg supply
+- Laare (S2): 1,800 kg supply  
+- Kangeta (S3): 1,700 kg supply
+
+DESTINATIONS:
+- Isiolo (D1): 1,500 kg demand
+- Kilifi (D2): 1,500 kg demand
+- Eastleigh, Nairobi (D3): 2,000 kg demand
+- Likoni, Mombasa (D4): 1,000 kg demand
+
+COST MATRIX (KES/kg):
+         D1   D2   D3   D4
+Maua:    10   21   18   23
+Laare:   11   22   16   23
+Kangeta: 10   21   17   23
+
+COST COMPONENTS per route:
+Base: KES 0.04/kg/km. Road premium: Isiolo +3.50 (murram), Coastal +0.50, Nairobi +0.00. Vehicle: Probox (Isiolo) +0, 5T lorry (Nairobi) +0.50, Ventilated lorry (Coastal) +1.00. Urgency: Isiolo +4.30, Kilifi +0.30, Eastleigh +4.20, Likoni +0.20.
+
+OPTIMAL VAM SCHEDULE (confirmed optimal by PuLP linear programming, total KES 101,700):
+- Maua → Isiolo: 1,500 kg · KES 15,000
+- Maua → Likoni: 1,000 kg · KES 23,000
+- Laare → Eastleigh: 1,800 kg · KES 28,800
+- Kangeta → Kilifi: 1,500 kg · KES 31,500
+- Kangeta → Eastleigh: 200 kg · KES 3,400
+
+TRANSIT TIMES: Isiolo 1.5-2h, Kilifi 7-9h, Eastleigh 4-5h, Likoni 8-10h.
+FRESHNESS WINDOW: 24-48 hours from harvest.
+
+Answer clearly and practically. If someone asks about cost for a custom quantity, calculate it: cost = unit_cost * quantity. Be helpful to both farmers (who need to understand if transport is worth it) and retailers (who need to plan deliveries). Keep answers concise and in plain language.`;
+
+let chatHistory = [];
+
+function appendMsg(role, text) {
+  const win = document.getElementById('chatWindow');
+  const div = document.createElement('div');
+  div.className = `chat-msg ${role}`;
+  div.textContent = text;
+  win.appendChild(div);
+  win.scrollTop = win.scrollHeight;
+}
+
+function handleChatKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+}
+
+function askSuggested(btn) {
+  document.getElementById('chatInput').value = btn.textContent;
+  sendMessage();
+}
+
+async function sendMessage() {
+  const input = document.getElementById('chatInput');
+  const text  = input.value.trim();
+  if (!text) return;
+
+  const key = getApiKey();
+  if (!key) {
+    appendMsg('system', 'Please enter your Anthropic API key in the box above to enable AI answers.');
+    return;
+  }
+
+  input.value = '';
+  appendMsg('user', text);
+  chatHistory.push({ role: 'user', content: text });
+
+  const btn = document.getElementById('sendBtn');
+  btn.innerHTML = '<span class="spinner"></span>';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': key,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 600,
+        system: SYSTEM_PROMPT,
+        messages: chatHistory
+      })
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error?.message || `HTTP ${res.status}`);
+    }
+
+    const data = await res.json();
+    const reply = data.content?.[0]?.text || 'No response received.';
+    chatHistory.push({ role: 'assistant', content: reply });
+    appendMsg('assistant', reply);
+
+  } catch (e) {
+    appendMsg('system', 'Error: ' + e.message + '. Check your API key and try again.');
+  } finally {
+    btn.innerHTML = 'Send';
+    btn.disabled = false;
+    document.getElementById('chatInput').focus();
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════════ */
+// Set default harvest time to now
+const now = new Date();
+now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+document.getElementById('farmerTime').value = now.toISOString().slice(0,16);
+
+// Restore API key if set this session
+const storedKey = sessionStorage.getItem('miraa_api_key');
+if (storedKey) {
+  document.getElementById('apiKeyInput').value = storedKey;
+  document.getElementById('apiStatus').textContent = 'Key loaded from session.';
+  document.getElementById('apiStatus').style.color = 'var(--green-mid)';
+}
+
+// Auto-render shipments on page load so they show on first visit to Track tab
+renderAllShipments();
+</script>
+
+</body>
+</html>

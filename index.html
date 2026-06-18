@@ -1095,10 +1095,9 @@ function askSuggested(btn) {
   document.getElementById('chatInput').value = btn.textContent;
   sendMessage();
 }
-
 async function sendMessage() {
   const input = document.getElementById('chatInput');
-  const text  = input.value.trim();
+  const text = input.value.trim();
   if (!text) return;
 
   input.value = '';
@@ -1106,16 +1105,21 @@ async function sendMessage() {
   chatHistory.push({ role: 'user', content: text });
 
   const btn = document.getElementById('sendBtn');
+  const originalText = btn.innerHTML;
   btn.innerHTML = '<span class="spinner"></span>';
   btn.disabled = true;
 
   try {
+    console.log('Sending message to /api/chat');
+    
     const res = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ messages: chatHistory })
     });
 
+    console.log('Response status:', res.status);
+    
     const data = await res.json();
 
     if (!res.ok) {
@@ -1127,9 +1131,10 @@ async function sendMessage() {
     appendMsg('assistant', reply);
 
   } catch (e) {
-    appendMsg('system', 'Could not get a response: ' + e.message);
+    console.error('Chat error details:', e);
+    appendMsg('system', 'Error: ' + e.message);
   } finally {
-    btn.innerHTML = 'Send';
+    btn.innerHTML = originalText;
     btn.disabled = false;
     document.getElementById('chatInput').focus();
   }
